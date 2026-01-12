@@ -10,6 +10,7 @@ First step
     & "C:\Program Files\Git\cmd\git.exe" clone https://github.com/ricflams/own.git c:/my/own
     c:/my/own/tools/pcsetup/setup/enable-windows-features.ps1 dryrun
     echo reboot now
+    
 
 Then all the apps
 
