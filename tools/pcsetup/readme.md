@@ -11,7 +11,7 @@ md c:\my\code
 ### Chrome, git, and install-scripts
 
 ```
-winget install --id Google.Chrome --source winget -e
+winget install --id Google.Chrome -e --source winget
 winget install --id Git.Git -e --source winget
 & $env:LOCALAPPDATA\Programs\Git\cmd\git.exe clone https://github.com/ricflams/own.git c:/my/own
 
