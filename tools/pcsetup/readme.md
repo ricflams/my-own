@@ -27,10 +27,11 @@ echo Restart-Computer
 
 Install WinGetUI and then manually fetch backup and restore all installed apps:
 
-Settings > Backup and Restore
-  Login with GitHub
-  Periodically perform a cloud backup [X]
-  Restore backup from cloud, and Restore
+Settings > Backup and Restore:
+
+  * Login with GitHub
+  * Periodically perform a cloud backup [X]
+  * Restore backup from cloud, and Restore
 
 ```
 winget install --exact --id MartiCliment.UniGetUI --source winget
