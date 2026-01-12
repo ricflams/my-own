@@ -25,14 +25,13 @@ c:/my/own/tools/pcsetup/setup/enable-windows-features.ps1 dryrun
 echo Restart-Computer
 ```
 
-Customize pp settings
+Install WinGetUI and then manually fetch backup and restore all installed apps
 
 ```
 winget install --exact --id MartiCliment.UniGetUI --source winget
-echo Now install all apps
 ```
 
-Then the AppData
+Fetch AppData
 
 ```
 cd $env:USERPROFILE\AppData
