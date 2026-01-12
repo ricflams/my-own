@@ -45,6 +45,7 @@ git init
 git remote add origin https://github.com/ricflams/pc-config.git
 git fetch origin
 git reset --mixed origin/main
+git checkout -b main
 git branch --set-upstream-to=origin/main main
 git config status.showUntrackedFiles no
 ```
