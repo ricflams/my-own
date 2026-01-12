@@ -1,43 +1,47 @@
 # PC setup
 
-Filco TKL keyboard
-BT connection: Press "clear device button", Ctrl-Alt-Fn, 1-4
+### My structure
 
-First, install Chrome to get access to this readme and my passwords:
+```
+md c:\my
+md c:\my\code
+
+```
+
+### Chrome, git, and install-scripts
 
 ```
 winget install --id Google.Chrome --source winget -e
-```
-
-First step is getting my install scripts:
-
-```
-md c:/my
 winget install --id Git.Git -e --source winget
 & $env:LOCALAPPDATA\Programs\Git\cmd\git.exe clone https://github.com/ricflams/own.git c:/my/own
+
 ```
 
-Run from elevated powershell:
+### Setup Windows
+
+Enable window features must be run from *elevated* powershell.
 
 ```
 c:/my/own/tools/pcsetup/setup/customize-settings.ps1 dryrun
 c:/my/own/tools/pcsetup/setup/enable-windows-features.ps1 dryrun
 echo Restart-Computer
+
 ```
 
-Install WinGetUI and then manually fetch backup and restore all installed apps:
-
-Settings > Backup and Restore:
-
-  * Login with GitHub
-  * Periodically perform a cloud backup [X]
-  * Restore backup from cloud, and Restore
+### WinGetUI
 
 ```
 winget install --exact --id MartiCliment.UniGetUI --source winget
+
 ```
 
-Fetch AppData
+ Settings > Backup and Restore:
+
+  * Login with GitHub
+  * Periodically perform a cloud backup [X]
+  * Restore backup from cloud and Restore all apps
+
+### AppData
 
 ```
 cd $env:USERPROFILE\AppData
@@ -48,4 +52,10 @@ git reset --mixed origin/main
 git checkout -b main
 git branch --set-upstream-to=origin/main main
 git config status.showUntrackedFiles no
+
 ```
+
+
+### Misc
+
+Filco TKL keyboard connection: Press "clear device button", Ctrl-Alt-Fn, 1-4
