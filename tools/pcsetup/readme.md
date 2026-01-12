@@ -20,14 +20,14 @@ winget install --id Git.Git -e --source winget
 Run from elevated powershell:
 
 ```
+c:/my/own/tools/pcsetup/setup/customize-settings.ps1 dryrun
 c:/my/own/tools/pcsetup/setup/enable-windows-features.ps1 dryrun
 echo Restart-Computer
 ```
 
-Then all the apps
+Customize pp settings
 
 ```
-c:/my/own/tools/pcsetup/setup/customize-settings.ps1 dryrun
 winget install --exact --id MartiCliment.UniGetUI --source winget
 echo Now install all apps
 ```
