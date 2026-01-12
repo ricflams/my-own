@@ -6,7 +6,7 @@ BT connection: Press "clear device button", Ctrl-Alt-Fn, 1-4
 First, install Chrome to get access to this readme and my passwords:
 
 ```
-winget install --id Google.Chrome -e
+winget install --id Google.Chrome --source winget -e
 ```
 
 First step is getting my install scripts:
