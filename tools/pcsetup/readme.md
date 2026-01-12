@@ -9,7 +9,7 @@ First, install Chrome to get access to this readme on the new pc:
 winget install --id Google.Chrome -e
 ```
 
-First step
+First step is getting my install scripts:
 
 ```
 md c:/my
@@ -17,7 +17,7 @@ winget install --id Git.Git -e --source winget
 & $env:LOCALAPPDATA\Programs\Git\cmd\git.exe clone https://github.com/ricflams/own.git c:/my/own
 ```
 
-From elevated powershell:
+Run from elevated powershell:
 
 ```
 c:/my/own/tools/pcsetup/setup/enable-windows-features.ps1 dryrun
