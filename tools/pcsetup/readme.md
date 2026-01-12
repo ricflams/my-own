@@ -3,6 +3,12 @@
 Filco TKL keyboard
 BT connection: Press "clear device button", Ctrl-Alt-Fn, 1-4
 
+First, install Chrome to get access to this readme on the new pc:
+
+```
+winget install --id Google.Chrome -e
+```
+
 First step
 
 ```
