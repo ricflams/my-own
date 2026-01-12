@@ -27,9 +27,9 @@ echo Restart-Computer
 Then all the apps
 
 ```
-winget install --exact --id MartiCliment.UniGetUI --source winget
-install all apps
 c:/my/own/tools/pcsetup/setup/customize-settings.ps1 dryrun
+winget install --exact --id MartiCliment.UniGetUI --source winget
+echo Now install all apps
 ```
 
 Then the AppData
