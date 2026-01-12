@@ -44,4 +44,5 @@ git init
 git remote add origin https://github.com/ricflams/pc-config.git
 git fetch origin
 git switch -c main origin/main
+git config status.showUntrackedFiles no
 ```
