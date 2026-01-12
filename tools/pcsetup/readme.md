@@ -11,8 +11,8 @@ md c:\my\code
 ### Chrome, git, and install-scripts
 
 ```
-winget install --id Google.Chrome -e --source winget
-winget install --id Git.Git -e --source winget
+winget install --exact --source winget --id Google.Chrome
+winget install --exact --source winget --id Git.Git
 & $env:LOCALAPPDATA\Programs\Git\cmd\git.exe clone https://github.com/ricflams/own.git c:/my/own
 
 ```
@@ -31,7 +31,7 @@ echo Restart-Computer
 ### WinGetUI
 
 ```
-winget install --exact --id MartiCliment.UniGetUI --source winget
+winget install --exact --source winget --id MartiCliment.UniGetUI
 
 ```
 
