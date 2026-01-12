@@ -25,7 +25,12 @@ c:/my/own/tools/pcsetup/setup/enable-windows-features.ps1 dryrun
 echo Restart-Computer
 ```
 
-Install WinGetUI and then manually fetch backup and restore all installed apps
+Install WinGetUI and then manually fetch backup and restore all installed apps:
+
+Settings > Backup and Restore
+  Login with GitHub
+  Periodically perform a cloud backup [X]
+  Restore backup from cloud, and Restore
 
 ```
 winget install --exact --id MartiCliment.UniGetUI --source winget
