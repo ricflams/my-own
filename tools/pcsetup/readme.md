@@ -19,7 +19,7 @@ winget install --exact --source winget --id Git.Git
 
 ### Setup Windows
 
-Enable window features must be run from *elevated* powershell.
+Must be run from *elevated* powershell.
 
 ```
 c:\my\own\tools\pcsetup\setup\customize-settings.ps1 dryrun
