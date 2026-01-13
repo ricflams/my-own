@@ -1,26 +1,61 @@
 # PC setup
 
-Filco TKL keyboard
-BT connection: Press "clear device button", Ctrl-Alt-Fn, 1-4
+### My structure
 
-First step
+```
+md c:\my
+md c:\my\code
 
-    md c:/my
-    winget install --id Git.Git -e --source winget
-    git clone https://github.com/ricflams/own.git c:/my/own
-    c:/my/own/tools/pcsetup/setup/enable-windows-features.ps1 dryrun
-    echo reboot now
+```
 
-Then all the apps
+### Chrome, git, and install-scripts
 
-    winget install --exact --id MartiCliment.UniGetUI --source winget
-    install all apps
-    c:/my/own/tools/pcsetup/setup/customize-settings.ps1 dryrun
+```
+winget install --exact --source winget --id Google.Chrome
+winget install --exact --source winget --id Git.Git
+& $env:LOCALAPPDATA\Programs\Git\cmd\git.exe clone https://github.com/ricflams/own.git c:\my\own
 
-Then the AppData
+```
 
-    cd $env:USERPROFILE\AppData
-    git init
-    git remote add origin https://github.com/ricflams/pc-config.git
-    git fetch origin
-    git switch -c main origin/main
+### Setup Windows
+
+Enable window features must be run from *elevated* powershell.
+
+```
+c:\my\own\tools\pcsetup\setup\customize-settings.ps1 dryrun
+c:\my\own\tools\pcsetup\setup\enable-windows-features.ps1 dryrun
+echo Restart-Computer
+
+```
+
+### WinGetUI
+
+```
+winget install --exact --source winget --id MartiCliment.UniGetUI
+
+```
+
+ Settings > Backup and Restore:
+
+  * Login with GitHub
+  * Periodically perform a cloud backup [X]
+  * Restore backup from cloud and Restore all apps
+
+### AppData
+
+```
+cd $env:USERPROFILE\AppData
+git init
+git remote add origin https://github.com/ricflams/pc-config.git
+git fetch origin
+git reset --mixed origin/main
+git checkout -b main
+git branch --set-upstream-to=origin/main main
+git config status.showUntrackedFiles no
+
+```
+
+
+### Misc
+
+Filco TKL keyboard connection: Press "clear device button", Ctrl-Alt-Fn, 1-4
