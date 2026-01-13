@@ -30,7 +30,10 @@ $ErrorActionPreference = "Stop"
 # -----------------------------
 # Desired registry settings
 # -----------------------------
+# https://learn.microsoft.com/en-us/windows/deployment/update/waas-restart#hklmsoftwarepoliciesmicrosoftwindowswindowsupdateau
 $desiredRegistry = @(
+  @{ Path="HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU";        Name="NoAutoRebootWithLoggedOnUsers";Type="DWord"; Value=1 },
+  @{ Path="HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU";        Name="AUOptions";                    Type="DWord"; Value=4 },
   @{ Path="HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"; Name="HideFileExt";                  Type="DWord"; Value=0 },
   @{ Path="HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"; Name="NavPaneExpandToCurrentFolder"; Type="DWord"; Value=1 },
   @{ Path="HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"; Name="IconsOnly";                    Type="DWord"; Value=0 },
@@ -52,6 +55,7 @@ $desiredCommands = @(
     Desired = "2"
     GetValue = {
       foreach ($line in (& wsl --status 2>$null)) {
+        $line = $line.Replace("`0", "") # wsl output is UTF-16; hack it into UTF-8
         if ($line -match 'Default\s+Version:\s*([0-9]+)') { return $Matches[1] }
       }
       ""
