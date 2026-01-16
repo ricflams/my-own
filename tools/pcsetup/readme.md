@@ -5,6 +5,10 @@
 ```
 md c:\my
 md c:\my\code
+md c:\my\koffr
+md c:\my\koffr\home
+md c:\my\koffr\work
+md c:\my\work
 
 ```
 
