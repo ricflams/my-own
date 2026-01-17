@@ -50,7 +50,7 @@ winget install --exact --source winget --id MartiCliment.UniGetUI
 ```
 cd $env:USERPROFILE\AppData
 git init
-git remote add origin https://github.com/ricflams/pc-config.git
+git remote add origin https://github.com/ricflams/AppData.git
 git fetch origin
 git reset --mixed origin/main
 git checkout -b main
