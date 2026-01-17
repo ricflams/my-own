@@ -25,7 +25,24 @@ param(
   [string]$Mode
 )
 
-$ErrorActionPreference = "Stop"
+# -----------------------------
+# Git config helper
+# -----------------------------
+function GitConfigCommand {
+  param(
+    [Parameter(Mandatory=$true)][string]$Key,
+    [Parameter(Mandatory=$true)][string]$Value,
+    [Parameter(Mandatory=$false)][string]$Flags = ""
+  )
+  
+  @{
+    Target  = "git config --global $Key"
+    Desired = $Value
+    GetValue = [scriptblock]::Create("& git config --global --get '$Key' 2>`$null")
+    SetValue = [scriptblock]::Create("param(`$v) & git config --global $Flags '$Key' `$v")
+  }
+}
+
 
 # -----------------------------
 # Desired registry settings
@@ -46,7 +63,6 @@ $desiredRegistry = @(
 # -----------------------------
 # Desired command operations
 # -----------------------------
-$bcPath = "$env:LOCALAPPDATA/Programs/Beyond Compare 5/bcomp.exe"
 
 $desiredCommands = @(
   # ---- WSL ----
@@ -63,31 +79,17 @@ $desiredCommands = @(
     SetValue = { param($v) & wsl --set-default-version $v }
   },
 
-  # ---- Git / Beyond Compare ----
-  @{
-    Target  = "git config --global difftool.bc.path"
-    Desired = $bcPath
-    GetValue = { & git config --global --get difftool.bc.path 2>$null }
-    SetValue = { param($v) & git config --global difftool.bc.path $v }
-  },
-  @{
-    Target  = "git config --global mergetool.bc.path"
-    Desired = $bcPath
-    GetValue = { & git config --global --get mergetool.bc.path 2>$null }
-    SetValue = { param($v) & git config --global mergetool.bc.path $v }
-  },
-  @{
-    Target  = "git config --global diff.tool"
-    Desired = "bc"
-    GetValue = { & git config --global --get diff.tool 2>$null }
-    SetValue = { param($v) & git config --global diff.tool $v }
-  },
-  @{
-    Target  = "git config --global merge.tool"
-    Desired = "bc"
-    GetValue = { & git config --global --get merge.tool 2>$null }
-    SetValue = { param($v) & git config --global merge.tool $v }
-  }
+  # ---- Git config ----
+  (GitConfigCommand -Key "difftool.bc.path" -Value "$env:LOCALAPPDATA/Programs/Beyond Compare 5/bcomp.exe"),
+  (GitConfigCommand -Key "mergetool.bc.path" -Value "$env:LOCALAPPDATA/Programs/Beyond Compare 5/bcomp.exe"),
+  (GitConfigCommand -Key "diff.tool" -Value "bc"),
+  (GitConfigCommand -Key "merge.tool" -Value "bc"),
+  (GitConfigCommand -Key "user.name" -Value "Richard Flamsholt"),
+  (GitConfigCommand -Key "user.email" -Value "richard@flamsholt.dk"),
+  (GitConfigCommand -Key "credential.helper" -Value "manager" -Flags "--replace-all"),
+  (GitConfigCommand -Key "init.defaultBranch" -Value "main"),
+  (GitConfigCommand -Key "pull.rebase" -Value "false"),
+  (GitConfigCommand -Key "core.autocrlf" -Value "true")
 )
 
 # -----------------------------
@@ -111,9 +113,8 @@ function Write-ActionLine {
   Write-Host (" {0}" -f $Message)
 }
 
-# -----------------------------
+
 # Registry helpers
-# -----------------------------
 function Ensure-KeyExists {
   param([Parameter(Mandatory=$true)][string]$Path)
   if (-not (Test-Path -LiteralPath $Path)) {
