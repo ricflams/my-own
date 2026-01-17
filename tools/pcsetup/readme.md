@@ -5,6 +5,10 @@
 ```
 md c:\my
 md c:\my\code
+md c:\my\koffr
+md c:\my\koffr\home
+md c:\my\koffr\work
+md c:\my\work
 
 ```
 
@@ -19,7 +23,7 @@ winget install --exact --source winget --id Git.Git
 
 ### Setup Windows
 
-Enable window features must be run from *elevated* powershell.
+Must be run from *elevated* powershell.
 
 ```
 c:\my\own\tools\pcsetup\setup\customize-settings.ps1 dryrun
@@ -46,7 +50,7 @@ winget install --exact --source winget --id MartiCliment.UniGetUI
 ```
 cd $env:USERPROFILE\AppData
 git init
-git remote add origin https://github.com/ricflams/pc-config.git
+git remote add origin https://github.com/ricflams/AppData.git
 git fetch origin
 git reset --mixed origin/main
 git checkout -b main

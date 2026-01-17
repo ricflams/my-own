@@ -47,17 +47,34 @@ function GitConfigCommand {
 # -----------------------------
 # Desired registry settings
 # -----------------------------
-# https://learn.microsoft.com/en-us/windows/deployment/update/waas-restart#hklmsoftwarepoliciesmicrosoftwindowswindowsupdateau
 $desiredRegistry = @(
-  @{ Path="HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU";        Name="NoAutoRebootWithLoggedOnUsers";Type="DWord"; Value=1 },
-  @{ Path="HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU";        Name="AUOptions";                    Type="DWord"; Value=4 },
-  @{ Path="HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"; Name="HideFileExt";                  Type="DWord"; Value=0 },
-  @{ Path="HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"; Name="NavPaneExpandToCurrentFolder"; Type="DWord"; Value=1 },
-  @{ Path="HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"; Name="IconsOnly";                    Type="DWord"; Value=0 },
-  @{ Path="HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"; Name="UseCompactMode";               Type="DWord"; Value=1 },
-  @{ Path="HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"; Name="TaskbarGlomLevel";             Type="DWord"; Value=2 },
-  @{ Path="HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"; Name="MMTaskbarEnabled";             Type="DWord"; Value=1 },
-  @{ Path="HKCU:\Software\Microsoft\Windows\CurrentVersion\Search";            Name="SearchboxTaskbarMode";         Type="DWord"; Value=0 }
+  # ---- Windows Update ----
+  # Prevent Windows from forcibly rebooting while you are logged in
+  @{ Path="HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU"; Name="NoAutoRebootWithLoggedOnUsers"; Type="DWord"; Value=1 };
+  # Set Update behavior to "Auto download and schedule the install" (4)
+  @{ Path="HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU"; Name="AUOptions"; Type="DWord"; Value=4 };
+
+  # ---- Explorer View Settings ----
+  # Show file extensions (Disable "Hide extensions for known file types")
+  @{ Path="HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"; Name="HideFileExt"; Type="DWord"; Value=0 };
+  # Navigation pane (left sidebar) automatically expands to the currently open folder
+  @{ Path="HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"; Name="NavPaneExpandToCurrentFolder"; Type="DWord"; Value=1 };
+  # Show Thumbnails instead of just Icons (0 = Show Thumbnails)
+  @{ Path="HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"; Name="IconsOnly"; Type="DWord"; Value=0 };
+  # Use "Compact Mode" (Decreases padding/whitespace in file lists, similar to older Windows)
+  @{ Path="HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"; Name="UseCompactMode"; Type="DWord"; Value=1 };
+
+  # ---- Taskbar ----
+  # Taskbar combining setting: 0=Always combine, 1=Combine when full, 2=Never combine
+  @{ Path="HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"; Name="TaskbarGlomLevel"; Type="DWord"; Value=2 };
+  # Show Taskbar on multiple monitors (1 = Enabled)
+  @{ Path="HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"; Name="MMTaskbarEnabled"; Type="DWord"; Value=1 };
+  # Search Box visibility: 0=Hidden, 1=Icon, 2=Box (0 keeps the taskbar clean)
+  @{ Path="HKCU:\Software\Microsoft\Windows\CurrentVersion\Search"; Name="SearchboxTaskbarMode"; Type="DWord"; Value=0 };
+
+  # ---- Context Menu ----
+  # Restore Windows 10 "Classic" Right-Click Menu (Disables "Show more options")
+  @{ Path="HKCU:\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32"; Name=""; Type="String"; Value="" };
 )
 
 # -----------------------------
@@ -80,8 +97,8 @@ $desiredCommands = @(
   },
 
   # ---- Git config ----
-  (GitConfigCommand -Key "difftool.bc.path" -Value "$env:LOCALAPPDATA/Programs/Beyond Compare 5/bcomp.exe"),
-  (GitConfigCommand -Key "mergetool.bc.path" -Value "$env:LOCALAPPDATA/Programs/Beyond Compare 5/bcomp.exe"),
+  (GitConfigCommand -Key "difftool.bc.path" -Value "$env:LOCALAPPDATA\Programs\Beyond Compare 5\bcomp.exe"),
+  (GitConfigCommand -Key "mergetool.bc.path" -Value "$env:LOCALAPPDATA\Programs\Beyond Compare 5\bcomp.exe"),
   (GitConfigCommand -Key "diff.tool" -Value "bc"),
   (GitConfigCommand -Key "merge.tool" -Value "bc"),
   (GitConfigCommand -Key "user.name" -Value "Richard Flamsholt"),
@@ -125,7 +142,7 @@ function Ensure-KeyExists {
 function Get-CurrentValueInfo {
   param(
     [Parameter(Mandatory=$true)][string]$Path,
-    [Parameter(Mandatory=$true)][string]$Name
+    [Parameter(Mandatory=$true)][AllowEmptyString()][string]$Name
   )
 
   if (-not (Test-Path -LiteralPath $Path)) {
@@ -150,6 +167,7 @@ function Get-CurrentValueInfo {
 function Format-Value {
   param([object]$Value)
   if ($null -eq $Value) { return "<null>" }
+  if ($Value -is [string] -and $Value.Length -eq 0) { return "(empty)" }
   if ($Value -is [byte[]]) { return ("0x" + ([BitConverter]::ToString($Value) -replace "-", "")) }
   return $Value.ToString()
 }
@@ -227,21 +245,31 @@ foreach ($d in $desiredRegistry) {
   $type = $d.Type
   $want = $d.Value
 
+  # For logging: If name is empty, it means we are editing the (Default) key value
+  $displayName = if ($name -eq "") { "(Default)" } else { $name }
+  
   $cur = Get-CurrentValueInfo -Path $path -Name $name
-  $target = "$path\$name"
+  $target = "$path\$displayName"
 
+  # Case 1: Key or Value doesn't exist at all
   if (-not $cur.KeyExists -or -not $cur.ValueExists) {
     Write-ActionLine -Kind "INIT" -Message ("{0} set to {1}" -f $target, (Format-Value $want))
     $script:willChangeAny = $true
 
     if ($Mode -eq "run") {
       Ensure-KeyExists -Path $path
-      New-ItemProperty -Path $path -Name $name -PropertyType $type -Value $want -Force | Out-Null
+      if ($name -eq "") {
+        # Special handling: Set the (Default) value of the key directly
+        Set-Item -LiteralPath $path -Value $want
+      } else {
+        New-ItemProperty -Path $path -Name $name -PropertyType $type -Value $want -Force | Out-Null
+      }
       $didChangeRegistry = $true
     }
     continue
   }
 
+  # Case 2: Value exists, check if it matches
   $currentValue = $cur.Value
   $same = $false
   if ($type -eq "DWord") {
@@ -255,12 +283,18 @@ foreach ($d in $desiredRegistry) {
     continue
   }
 
+  # Case 3: Value exists but is wrong -> Update it
   Write-ActionLine -Kind "SET" -Message ("{0} update {1} to {2}" -f $target, (Format-Value $currentValue), (Format-Value $want))
   $script:willChangeAny = $true
 
   if ($Mode -eq "run") {
     Ensure-KeyExists -Path $path
-    Set-ItemProperty -Path $path -Name $name -Type $type -Value $want
+    if ($name -eq "") {
+        # Special handling for (Default)
+        Set-Item -LiteralPath $path -Value $want
+    } else {
+        Set-ItemProperty -Path $path -Name $name -Type $type -Value $want
+    }
     $didChangeRegistry = $true
   }
 }
