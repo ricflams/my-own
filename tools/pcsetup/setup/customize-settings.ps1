@@ -51,8 +51,8 @@ $desiredRegistry = @(
   # ---- Windows Update ----
   # Prevent Windows from forcibly rebooting while you are logged in
   @{ Path="HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU"; Name="NoAutoRebootWithLoggedOnUsers"; Type="DWord"; Value=1 };
-  # Set Update behavior to "Auto download and schedule the install" (4)
-  @{ Path="HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU"; Name="AUOptions"; Type="DWord"; Value=4 };
+  # Set Update behavior to "Notify for download and notify for install" (2)
+  @{ Path="HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU"; Name="AUOptions"; Type="DWord"; Value=2 };
 
   # ---- Explorer View Settings ----
   # Show file extensions (Disable "Hide extensions for known file types")
