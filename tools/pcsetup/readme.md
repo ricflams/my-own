@@ -55,7 +55,7 @@ git fetch origin
 git reset --mixed origin/main
 git checkout -b main
 git branch --set-upstream-to=origin/main main
-git config status.showUntrackedFiles no
+Add-Content -Path ".git/info/exclude" -Value "*"
 
 ```
 
