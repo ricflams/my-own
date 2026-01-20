@@ -25,6 +25,18 @@ param(
   [string]$Mode
 )
 
+$ErrorActionPreference = "Stop"
+
+# Check for admin privileges in run mode
+if ($Mode -eq "run") {
+  $identity  = [Security.Principal.WindowsIdentity]::GetCurrent()
+  $principal = [Security.Principal.WindowsPrincipal]$identity
+
+  if (-not $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
+    throw "Run this script from an elevated PowerShell (Run as Administrator)."
+  }
+}
+
 # -----------------------------
 # Git config helper
 # -----------------------------
@@ -44,9 +56,9 @@ function GitConfigCommand {
 }
 
 
-# -----------------------------
-# Desired registry settings
-# -----------------------------
+##################################################################################################
+#                                  Configuration Section                                         #
+##################################################################################################
 $desiredRegistry = @(
   # ---- Windows Update ----
   # Prevent Windows from forcibly rebooting while you are logged in
@@ -77,10 +89,6 @@ $desiredRegistry = @(
   @{ Path="HKCU:\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32"; Name=""; Type="String"; Value="" };
 )
 
-# -----------------------------
-# Desired command operations
-# -----------------------------
-
 $desiredCommands = @(
   # ---- WSL ----
   @{
@@ -108,6 +116,8 @@ $desiredCommands = @(
   (GitConfigCommand -Key "pull.rebase" -Value "false"),
   (GitConfigCommand -Key "core.autocrlf" -Value "true")
 )
+##################################################################################################
+
 
 # -----------------------------
 # Output helper (color only KEEP/INIT/SET)

@@ -24,13 +24,8 @@ param(
 
 $ErrorActionPreference = "Stop"
 
-$desiredFeatures = @(
-  @{ Name = "Containers-DisposableClientVM";     Display = "Windows Sandbox" },
-  @{ Name = "Microsoft-Windows-Subsystem-Linux"; Display = "WSL" },
-  @{ Name = "NetFx3";                            Display = ".NET Framework 3.5" }
-)
-
-function Assert-Admin {
+# Check for admin privileges in run mode
+if ($Mode -eq "run") {
   $identity  = [Security.Principal.WindowsIdentity]::GetCurrent()
   $principal = [Security.Principal.WindowsPrincipal]$identity
 
@@ -38,6 +33,16 @@ function Assert-Admin {
     throw "Run this script from an elevated PowerShell (Run as Administrator)."
   }
 }
+
+##################################################################################################
+#                                  Configuration Section                                         #
+##################################################################################################
+$desiredFeatures = @(
+  @{ Name = "Containers-DisposableClientVM";     Display = "Windows Sandbox" },
+  @{ Name = "Microsoft-Windows-Subsystem-Linux"; Display = "WSL" },
+  @{ Name = "NetFx3";                            Display = ".NET Framework 3.5" }
+)
+##################################################################################################
 
 function Write-ActionLine {
   param(
@@ -75,10 +80,6 @@ function Get-FeatureState {
 }
 
 Write-Host "Mode: $Mode" -ForegroundColor Cyan
-
-if ($Mode -eq "run") {
-  Assert-Admin
-}
 
 $script:willChangeAny = $false
 
