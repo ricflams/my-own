@@ -65,6 +65,8 @@ $desiredRegistry = @(
   @{ Path="HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU"; Name="NoAutoRebootWithLoggedOnUsers"; Type="DWord"; Value=1 };
   # Set Update behavior to "Notify for download and notify for install" (2)
   @{ Path="HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU"; Name="AUOptions"; Type="DWord"; Value=2 };
+  # Show restart notification
+  @{ Path="HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate"; Name="SetRestartNotification"; Type="DWord"; Value=1 };
 
   # ---- Explorer View Settings ----
   # Show file extensions (Disable "Hide extensions for known file types")
