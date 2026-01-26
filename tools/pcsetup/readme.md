@@ -49,7 +49,7 @@ winget install --exact --source winget --id MartiCliment.UniGetUI
 
 Next step, the user profile.
 
-See https://github.com/ricflams/my-windows-userprofile/edit/main/README.md
+See https://github.com/ricflams/my-windows-userprofile/
 
 ### Misc
 
