@@ -47,15 +47,9 @@ winget install --exact --source winget --id MartiCliment.UniGetUI
 
 ### C:\users\myname
 
-```
-cd $env:USERPROFILE
-git init
-git remote add origin https://github.com/ricflams/my-windows-userprofile.git
-git fetch origin
-git checkout -t origin/main
+Next step, the user profile.
 
-```
-
+See https://github.com/ricflams/my-windows-userprofile/edit/main/README.md
 
 ### Misc
 
