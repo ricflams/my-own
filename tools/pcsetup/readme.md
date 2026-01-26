@@ -48,14 +48,13 @@ winget install --exact --source winget --id MartiCliment.UniGetUI
 ### AppData
 
 ```
-cd $env:USERPROFILE\AppData
+cd $env:USERPROFILE
 git init
-git remote add origin https://github.com/ricflams/AppData.git
+git remote add origin https://github.com/ricflams/my-windows-userprofile.git
 git fetch origin
 git reset --mixed origin/main
 git checkout -b main
 git branch --set-upstream-to=origin/main main
-Add-Content -Path ".git/info/exclude" -Value "*"
 
 ```
 
