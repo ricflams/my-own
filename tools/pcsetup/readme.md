@@ -45,20 +45,11 @@ winget install --exact --source winget --id MartiCliment.UniGetUI
   * Periodically perform a cloud backup [X]
   * Restore backup from cloud and Restore all apps
 
-### AppData
+### C:\users\myname
 
-```
-cd $env:USERPROFILE\AppData
-git init
-git remote add origin https://github.com/ricflams/AppData.git
-git fetch origin
-git reset --mixed origin/main
-git checkout -b main
-git branch --set-upstream-to=origin/main main
-Add-Content -Path ".git/info/exclude" -Value "*"
+Next step, the user profile.
 
-```
-
+See https://github.com/ricflams/my-windows-userprofile/
 
 ### Misc
 
