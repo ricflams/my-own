@@ -24,14 +24,11 @@ param(
 
 $ErrorActionPreference = "Stop"
 
-# Check for admin privileges in run mode
-if ($Mode -eq "run") {
-  $identity  = [Security.Principal.WindowsIdentity]::GetCurrent()
-  $principal = [Security.Principal.WindowsPrincipal]$identity
-
-  if (-not $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
-    throw "Run this script from an elevated PowerShell (Run as Administrator)."
-  }
+# Check for admin privileges, also dryrun mode to give proper feedback of needed changes
+$identity  = [Security.Principal.WindowsIdentity]::GetCurrent()
+$principal = [Security.Principal.WindowsPrincipal]$identity
+if (-not $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
+  Write-Error "Run this script from an elevated PowerShell as Administrator" -ErrorAction Stop
 }
 
 ##################################################################################################
@@ -114,9 +111,19 @@ foreach ($feat in $desiredFeatures) {
 }
 
 if (-not $script:willChangeAny) {
-  Write-Host "No changes needed." -ForegroundColor Green
-} elseif ($Mode -eq "dryrun") {
-  Write-Host "Dry run: no changes were applied." -ForegroundColor DarkGray
-} else {
-  Write-Host "Done. A restart may be required." -ForegroundColor Yellow
+  Write-Host "No changes needed" -ForegroundColor Green
+  exit 0
 }
+
+if ($Mode -eq "dryrun") {
+  Write-Host "Features not updated in dry run" -ForegroundColor DarkGray
+} else {
+  Write-Host "Features were updated and restart is required" -ForegroundColor Yellow
+  $response = Read-Host "Restart now? (y/n)"
+  if ($response -eq "y" -or $response -eq "Y") {
+    Write-Host "Restarting..." -ForegroundColor Yellow
+    Restart-Computer
+  }
+}
+
+exit 1

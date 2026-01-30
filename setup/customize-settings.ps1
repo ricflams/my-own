@@ -1,5 +1,5 @@
 <#
-customize.ps1
+customize-settings.ps1
 
 Single go-to script for desired Windows settings:
 - Registry operations (Explorer/Taskbar)
@@ -27,20 +27,17 @@ param(
 
 $ErrorActionPreference = "Stop"
 
-# Check for admin privileges in run mode
-if ($Mode -eq "run") {
-  $identity  = [Security.Principal.WindowsIdentity]::GetCurrent()
-  $principal = [Security.Principal.WindowsPrincipal]$identity
-
-  if (-not $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
-    throw "Run this script from an elevated PowerShell (Run as Administrator)."
-  }
+# Check for admin privileges, also dryrun mode to give proper feedback of needed changes
+$identity  = [Security.Principal.WindowsIdentity]::GetCurrent()
+$principal = [Security.Principal.WindowsPrincipal]$identity
+if (-not $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
+  Write-Error "Run this script from an elevated PowerShell as Administrator" -ErrorAction Stop
 }
 
 # -----------------------------
 # Git config helper
 # -----------------------------
-function GitConfigCommand {
+function New-GitConfigCommand {
   param(
     [Parameter(Mandatory=$true)][string]$Key,
     [Parameter(Mandatory=$true)][string]$Value,
@@ -107,16 +104,16 @@ $desiredCommands = @(
   },
 
   # ---- Git config ----
-  (GitConfigCommand -Key "difftool.bc.path" -Value "$env:LOCALAPPDATA\Programs\Beyond Compare 5\bcomp.exe"),
-  (GitConfigCommand -Key "mergetool.bc.path" -Value "$env:LOCALAPPDATA\Programs\Beyond Compare 5\bcomp.exe"),
-  (GitConfigCommand -Key "diff.tool" -Value "bc"),
-  (GitConfigCommand -Key "merge.tool" -Value "bc"),
-  (GitConfigCommand -Key "user.name" -Value "Richard Flamsholt"),
-  (GitConfigCommand -Key "user.email" -Value "richard@flamsholt.dk"),
-  (GitConfigCommand -Key "credential.helper" -Value "manager" -Flags "--replace-all"),
-  (GitConfigCommand -Key "init.defaultBranch" -Value "main"),
-  (GitConfigCommand -Key "pull.rebase" -Value "false"),
-  (GitConfigCommand -Key "core.autocrlf" -Value "true")
+  (New-GitConfigCommand -Key "difftool.bc.path" -Value "$env:LOCALAPPDATA\Programs\Beyond Compare 5\bcomp.exe"),
+  (New-GitConfigCommand -Key "mergetool.bc.path" -Value "$env:LOCALAPPDATA\Programs\Beyond Compare 5\bcomp.exe"),
+  (New-GitConfigCommand -Key "diff.tool" -Value "bc"),
+  (New-GitConfigCommand -Key "merge.tool" -Value "bc"),
+  (New-GitConfigCommand -Key "user.name" -Value "Richard Flamsholt"),
+  (New-GitConfigCommand -Key "user.email" -Value "richard@flamsholt.dk"),
+  (New-GitConfigCommand -Key "credential.helper" -Value "manager" -Flags "--replace-all"),
+  (New-GitConfigCommand -Key "init.defaultBranch" -Value "main"),
+  (New-GitConfigCommand -Key "pull.rebase" -Value "false"),
+  (New-GitConfigCommand -Key "core.autocrlf" -Value "true")
 )
 ##################################################################################################
 
@@ -144,7 +141,7 @@ function Write-ActionLine {
 
 
 # Registry helpers
-function Ensure-KeyExists {
+function Initialize-RegistryKey {
   param([Parameter(Mandatory=$true)][string]$Path)
   if (-not (Test-Path -LiteralPath $Path)) {
     New-Item -Path $Path -Force | Out-Null
@@ -201,7 +198,7 @@ function Invoke-GetValueCommand {
   }
 }
 
-function Apply-CommandDesiredState {
+function Set-CommandDesiredState {
   param(
     [Parameter(Mandatory=$true)][string]$Target,
     [Parameter(Mandatory=$true)][string]$Desired,
@@ -213,7 +210,7 @@ function Apply-CommandDesiredState {
 
   if ([string]::IsNullOrWhiteSpace($current)) {
     Write-ActionLine -Kind "INIT" -Message ("{0} set to {1}" -f $Target, $Desired)
-    $script:willChangeAny = $true
+    $script:hasUpdates = $true
 
     if ($Mode -eq "run") {
       try {
@@ -231,7 +228,7 @@ function Apply-CommandDesiredState {
   }
 
   Write-ActionLine -Kind "SET" -Message ("{0} update {1} to {2}" -f $Target, $current, $Desired)
-  $script:willChangeAny = $true
+  $script:hasUpdates = $true
 
   if ($Mode -eq "run") {
     try {
@@ -247,8 +244,7 @@ function Apply-CommandDesiredState {
 # -----------------------------
 Write-Host "Mode: $Mode" -ForegroundColor Cyan
 
-$script:willChangeAny = $false
-$didChangeRegistry    = $false
+$script:hasUpdates = $false
 
 # ---- Registry operations
 foreach ($d in $desiredRegistry) {
@@ -266,17 +262,17 @@ foreach ($d in $desiredRegistry) {
   # Case 1: Key or Value doesn't exist at all
   if (-not $cur.KeyExists -or -not $cur.ValueExists) {
     Write-ActionLine -Kind "INIT" -Message ("{0} set to {1}" -f $target, (Format-Value $want))
-    $script:willChangeAny = $true
+    $script:hasUpdates = $true
 
     if ($Mode -eq "run") {
-      Ensure-KeyExists -Path $path
+      Initialize-RegistryKey -Path $path
       if ($name -eq "") {
         # Special handling: Set the (Default) value of the key directly
         Set-Item -LiteralPath $path -Value $want
       } else {
         New-ItemProperty -Path $path -Name $name -PropertyType $type -Value $want -Force | Out-Null
       }
-      $didChangeRegistry = $true
+      $script:hasUpdates = $true
     }
     continue
   }
@@ -297,38 +293,40 @@ foreach ($d in $desiredRegistry) {
 
   # Case 3: Value exists but is wrong -> Update it
   Write-ActionLine -Kind "SET" -Message ("{0} update {1} to {2}" -f $target, (Format-Value $currentValue), (Format-Value $want))
-  $script:willChangeAny = $true
+  $script:hasUpdates = $true
 
   if ($Mode -eq "run") {
-    Ensure-KeyExists -Path $path
+    Initialize-RegistryKey -Path $path
     if ($name -eq "") {
         # Special handling for (Default)
         Set-Item -LiteralPath $path -Value $want
     } else {
         Set-ItemProperty -Path $path -Name $name -Type $type -Value $want
     }
-    $didChangeRegistry = $true
+    $script:hasUpdates = $true
   }
 }
 
 # ---- Command operations
 foreach ($c in $desiredCommands) {
-  Apply-CommandDesiredState `
+  Set-CommandDesiredState `
     -Target   $c.Target `
     -Desired  $c.Desired `
     -GetValue $c.GetValue `
     -SetValue $c.SetValue
 }
 
-# Restart Explorer only if we actually changed registry values in run mode.
-if ($Mode -eq "run" -and $didChangeRegistry) {
-  Write-Host "Restarting Explorer (registry changes applied)..." -ForegroundColor Yellow
+if (-not $script:hasUpdates) {
+  Write-Host "No changes needed" -ForegroundColor Green
+  exit 0
+}
+
+if ($Mode -eq "dryrun") {
+  Write-Host "Registry not updated in dry run" -ForegroundColor DarkGray
+} else {
+  Write-Host "Registry was updated and Explorer will be restarted" -ForegroundColor Yellow
   Get-Process explorer -ErrorAction SilentlyContinue | Stop-Process -Force
   Start-Process explorer.exe
 }
 
-if (-not $script:willChangeAny) {
-  Write-Host "No changes needed." -ForegroundColor Green
-} elseif ($Mode -eq "dryrun") {
-  Write-Host "Dry run: no changes were applied." -ForegroundColor DarkGray
-}
+exit 1

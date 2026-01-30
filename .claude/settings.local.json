@@ -1,7 +1,10 @@
 {
   "permissions": {
     "allow": [
-      "Bash(tree /F 'C:\\\\Users\\\\rfl\\\\Downloads\\\\userprofile-temp\\\\my-windows-userprofile-main')"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(git pull:*)"
     ]
   }
 }
