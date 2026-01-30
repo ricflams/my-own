@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(tree /F 'C:\\\\Users\\\\rfl\\\\Downloads\\\\userprofile-temp\\\\my-windows-userprofile-main')"
+    ]
+  }
+}
