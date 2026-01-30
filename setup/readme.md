@@ -17,7 +17,7 @@ md c:\my\work
 ```
 winget install --exact --source winget --id Google.Chrome
 winget install --exact --source winget --id Git.Git
-& $env:LOCALAPPDATA\Programs\Git\cmd\git.exe clone https://github.com/ricflams/own.git c:\my\own
+& $env:LOCALAPPDATA\Programs\Git\cmd\git.exe clone https://github.com/ricflams/my-own.git c:\my\own
 
 ```
 
