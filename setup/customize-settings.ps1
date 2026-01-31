@@ -113,7 +113,7 @@ $desiredCommands = @(
   (New-GitConfigCommand -Key "credential.helper" -Value "manager" -Flags "--replace-all"),
   (New-GitConfigCommand -Key "init.defaultBranch" -Value "main"),
   (New-GitConfigCommand -Key "pull.rebase" -Value "false"),
-  (New-GitConfigCommand -Key "core.autocrlf" -Value "true")
+  (New-GitConfigCommand -Key "core.autocrlf" -Value "false")
 )
 ##################################################################################################
 
