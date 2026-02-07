@@ -1,5 +1,5 @@
 <#
-enable-windows-features.ps1
+setup-features.ps1
 
 Enables Windows Optional Features (Online):
 - Windows Sandbox                     (Containers-DisposableClientVM)
@@ -7,40 +7,43 @@ Enables Windows Optional Features (Online):
 - .NET Framework 3.5                  (NetFx3)
 
 Usage:
-  .\enable-windows-features.ps1 dryrun
-  .\enable-windows-features.ps1 run
+  .\setup-features.ps1         # Dry run mode (default)
+  .\setup-features.ps1 run     # Apply changes
 
 Output:
   KEEP: <feature> is <state>     (KEEP in green)
   INIT: <feature> set to Enabled (INIT in red)
    SET: <feature> update <old> to Enabled  (SET in red; note leading space)
+
+Notes:
+- Configuration is in config.psd1 (unified configuration file)
 #>
 
 param(
-  [Parameter(Mandatory = $true, Position = 0)]
+  [Parameter(Position = 0)]
   [ValidateSet("run", "dryrun")]
-  [string]$Mode
+  [string]$Mode = "dryrun"
 )
 
 $ErrorActionPreference = "Stop"
 
-# Check for admin privileges, also dryrun mode to give proper feedback of needed changes
+# Check for admin privileges
 $identity  = [Security.Principal.WindowsIdentity]::GetCurrent()
 $principal = [Security.Principal.WindowsPrincipal]$identity
 if (-not $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
   Write-Error "Run this script from an elevated PowerShell as Administrator" -ErrorAction Stop
 }
 
-##################################################################################################
-#                                  Configuration Section                                         #
-##################################################################################################
-$desiredFeatures = @(
-  @{ Name = "Containers-DisposableClientVM";     Display = "Windows Sandbox" },
-  @{ Name = "Microsoft-Windows-Subsystem-Linux"; Display = "WSL" },
-  @{ Name = "NetFx3";                            Display = ".NET Framework 3.5" }
-)
-##################################################################################################
+$scriptDir = Split-Path -Path $MyInvocation.MyCommand.Definition -Parent
+$rootDir = Split-Path -Path $scriptDir -Parent
 
+# Load configuration
+$configPath = Join-Path $rootDir "config.psd1"
+$config = Import-PowerShellDataFile $configPath
+
+# -----------------------------
+# Output helper
+# -----------------------------
 function Write-ActionLine {
   param(
     [Parameter(Mandatory=$true)][ValidateSet("KEEP","INIT","SET")][string]$Kind,
@@ -50,7 +53,7 @@ function Write-ActionLine {
   $label = switch ($Kind) {
     "KEEP" { "KEEP" }
     "INIT" { "INIT" }
-    "SET"  { " SET" } # leading space to align with KEEP/INIT
+    "SET"  { " SET" }
   }
 
   $color = if ($Kind -eq "KEEP") { "Green" } else { "Red" }
@@ -59,6 +62,9 @@ function Write-ActionLine {
   Write-Host (" {0}" -f $Message)
 }
 
+# -----------------------------
+# Feature helper
+# -----------------------------
 function Get-FeatureState {
   param([Parameter(Mandatory=$true)][string]$FeatureName)
 
@@ -76,23 +82,26 @@ function Get-FeatureState {
   }
 }
 
+# -----------------------------
+# Main execution
+# -----------------------------
 Write-Host "Mode: $Mode" -ForegroundColor Cyan
 
-$script:willChangeAny = $false
+$hasUpdates = $false
 
-foreach ($feat in $desiredFeatures) {
-  $name  = $feat.Name
-  $thing = "$name ($($feat.Display))"
+foreach ($feat in $config.Features.DesiredFeatures) {
+  $featureName = $feat.FeatureName
+  $thing = "$featureName ($($feat.Name))"
   $want  = "Enabled"
 
-  $cur = Get-FeatureState -FeatureName $name
+  $cur = Get-FeatureState -FeatureName $featureName
 
   if (-not $cur.Exists) {
     Write-ActionLine -Kind "INIT" -Message ("{0} set to {1}" -f $thing, $want)
-    $script:willChangeAny = $true
+    $hasUpdates = $true
 
     if ($Mode -eq "run") {
-      Enable-WindowsOptionalFeature -Online -FeatureName $name -All -NoRestart | Out-Null
+      Enable-WindowsOptionalFeature -Online -FeatureName $featureName -All -NoRestart | Out-Null
     }
     continue
   }
@@ -103,14 +112,14 @@ foreach ($feat in $desiredFeatures) {
   }
 
   Write-ActionLine -Kind "SET" -Message ("{0} update {1} to {2}" -f $thing, $cur.State, $want)
-  $script:willChangeAny = $true
+  $hasUpdates = $true
 
   if ($Mode -eq "run") {
-    Enable-WindowsOptionalFeature -Online -FeatureName $name -All -NoRestart | Out-Null
+    Enable-WindowsOptionalFeature -Online -FeatureName $featureName -All -NoRestart | Out-Null
   }
 }
 
-if (-not $script:willChangeAny) {
+if (-not $hasUpdates) {
   Write-Host "No changes needed" -ForegroundColor Green
   exit 0
 }

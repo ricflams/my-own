@@ -1,5 +1,10 @@
 # PC setup
 
+## Project Structure
+
+This repository contains instructions and setup scripts for a new PC.
+
+
 ### My structure
 
 ```
@@ -23,14 +28,14 @@ winget install --exact --source winget --id Git.Git
 
 ### Setup Windows
 
-Must be run from *elevated* powershell.
+Must be run from *elevated* PowerShell.
 
+```powershell
+.\setup.ps1           # Preview all changes (dry run mode)
+.\setup.ps1 run       # Apply all changes
 ```
-c:\my\own\tools\pcsetup\setup\customize-settings.ps1 dryrun
-c:\my\own\tools\pcsetup\setup\enable-windows-features.ps1 dryrun
-echo Restart-Computer
 
-```
+All configuration is centralized in config.psd1 for easy customization.
 
 ### WinGetUI
 
