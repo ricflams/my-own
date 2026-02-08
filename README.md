@@ -1,107 +1,71 @@
-# PC Setup and Sync
+# My Windows PC setup
 
-This setup has two independent parts:
+## Philosophy
 
-* the **c:\my hierarchy** for organizing and syncing user-created content, and
-* the **%userprofile%** [repo](https://github.com/ricflams/my-windows-userprofile) for syncing app configs that naturally live in %USERPROFILE%.
+All user-created content lives under `c:\my`.
 
-## The c:\my folders
+* c:\my\ **own** is this GitHub repo of curated files. For now only for setup. Custom configs live here, eg the keyboard-mapping file for AutoHotKey. The repo is synced manually.
+* c:\my\ **code** is for my code-repos.
+* c:\my\ **koffr** is "the cloud". Bulk data sync'ed between my machines. Two sub-folders:
+    * c:\my\koffr\ **work** - work data, synced to both personal and work computers
+    * c:\my\koffr\ **home** - personal project data, synced between personal computers only
+* c:\my\ **work** is home for data related to my job
 
-All user-created content lives under c:\my.
+## How to setup
 
-There are four categories:
+Run these commands in Powershell.
 
-c:\my\ **own** is this github repo of curated files, eg tools and assets for setting up my pc. Specific configs that don't have their home in the %userprofile% or in the cloud themselves lives here; eg the keyboard-mapping file for AutoHotKey. The repo is synced manually.
+### The c:\my structure
 
-c:\my\ **code** is for code that has their own repos
+```
+md c:\my
+md c:\my\code
+md c:\my\koffr
+md c:\my\koffr\home
+md c:\my\koffr\work
+md c:\my\work
 
-c:\my\ **koffr** is "the cloud". It's for bulk data that doesn't natively live in the cloud and still should stay sync'ed between my machines. For instance screenshots or data files from temperature-sensors. There are two sub-folders:
+```
 
-* c:\my\koffr **\work** - work data, synced to both personal and work computers
-* c:\my\koffr\ **home** - personal project data, synced between personal computers only
+### Chrome, git, and install-scripts
 
+For passwords, git, and the actual automation:
 
-## The %userprofile% configs
+```
+winget install --exact --source winget --id Google.Chrome
+winget install --exact --source winget --id Git.Git
+& $env:LOCALAPPDATA\Programs\Git\cmd\git.exe clone https://github.com/ricflams/my-own.git c:\my\own
 
-Application naturally write their settings below %USERPROFILE%. The [repo](https://github.com/ricflams/my-windows-userprofile) embraces that reality instead of fighting it. Initialized directly in the userprofile folder, it ignores everything by default and track only selected, stable config-files, like Terminal-settings and Windows Startup shortcuts.
+```
 
-### Initialize Userprofile Repo
+### Setup Windows
+
+Must be run from *elevated* PowerShell.
+Will need to be re-run later when apps referred by here are installed.
 
 ```powershell
-cd $env:USERPROFILE
-git init
-git remote add origin https://github.com/ricflams/my-windows-userprofile.git
-git fetch origin
-git checkout -t origin/main
+.\setup.ps1           # Preview all changes (dry run mode)
+.\setup.ps1 run       # Apply all changes
 ```
 
-### Add New Config to Userprofile Repo
+All configuration is centralized in [setup/config.psd1]() for easy customization.
 
-```powershell
-# Add a specific file (ignoring the default * pattern)
-git add -f path\to\config\file.ini
+### WinGetUI
 
-# Commit and push
-git commit -m "Add config for ApplicationName"
-git push
-```
-
-### System Automation Scripts
-
-Scripts live in `c:\my\own\setup\setup\` and follow a **dryrun/run** pattern.
-
-```powershell
-# Preview changes (no admin required)
-c:\my\own\setup\setup\customize-settings.ps1 dryrun
-c:\my\own\setup\setup\enable-windows-features.ps1 dryrun
-
-# Apply changes (requires elevated PowerShell)
-c:\my\own\setup\setup\customize-settings.ps1 run
-c:\my\own\setup\setup\enable-windows-features.ps1 run
-```
-
-**customize-settings.ps1** declares desired Windows Registry values and git config commands, compares current state, and reconciles. Outputs color-coded status:
-- **KEEP** (green): Already correct
-- **INIT** (red): Key missing
-- **SET** (red): Needs update
-
-Restarts Explorer automatically when registry changes are applied.
-
-**enable-windows-features.ps1** enables Windows optional features (Sandbox, WSL, .NET 3.5) using the same dryrun/run pattern with admin validation.
-
-## Portable Shortcut Templates
-
-Startup shortcuts live in:
-```
-%USERPROFILE%\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
-```
-
-Common settings for all shortcuts:
-```
-Start in: (empty)
-Run: Minimized
-```
-
-### Standard Shortcut to AppData Executable
-
-For applications like ShareX:
-
-```powershell
-%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -WindowStyle Hidden -Command "Start-Process '%USERPROFILE%\AppData\Local\Programs\ShareX\ShareX.exe' -ArgumentList '-silent'"
-```
-
-### Shortcut Requiring Working Directory
-
-For applications like Koofr that need to start in their own folder:
-
-```powershell
-%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -WindowStyle Hidden -Command "Start-Process '%USERPROFILE%\AppData\Local\koofr\storagegui.exe' -WorkingDirectory '%USERPROFILE%\AppData\Local\koofr'"
-```
-
-### Shortcut to Hardcoded Path
-
-For files like dansk.ahk in the /own repo:
+Install my preferred app-installer, WinGetUI, and configure it.
 
 ```
-C:\my\own\setup\config\AutoHotkey\dansk.ahk
+winget install --exact --source winget --id MartiCliment.UniGetUI
+
 ```
+
+ Settings > Backup and Restore:
+
+  * Login with GitHub
+  * Periodically perform a cloud backup [X]
+  * Restore backup from cloud and Restore all apps
+
+## Manual setup steps
+
+* Filco TKL keyboard. For connection, press "clear device button", Ctrl-Alt-Fn, 1-4
+
