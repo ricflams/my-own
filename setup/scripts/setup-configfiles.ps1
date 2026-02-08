@@ -13,10 +13,10 @@ Usage:
   .\setup-configfiles.ps1 run     # Apply changes
 
 Output:
+  KEEP: <file>:<key>                (KEEP in green)
+   SET: <file>:<key> update         (SET in red)
   MISS: <file> is missing           (MISS in yellow)
   MISS: <file>:<key> line missing   (MISS in yellow)
-  KEEP: <file>:<key> is correct     (KEEP in green)
-   SET: <file>:<key> update         (SET in red)
 
 Notes:
 - Configuration is in config.psd1 (ConfigFiles section)
@@ -106,7 +106,7 @@ foreach ($entry in $config.ConfigFiles) {
 
   # Case 2: Line exists and matches
   if ($currentLine -eq $desiredLine) {
-    Write-ActionLine -Kind "KEEP" -Message "$target is correct"
+    Write-ActionLine -Kind "KEEP" -Message "$target"
     continue
   }
 

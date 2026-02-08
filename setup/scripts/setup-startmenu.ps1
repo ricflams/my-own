@@ -14,9 +14,9 @@ Usage:
   .\setup-startmenu.ps1 run     # Apply changes
 
 Output:
-  KEEP: <shortcut> is correct        (KEEP in green)
-  INIT: <shortcut> -> <target>       (INIT in red)
-   SET: Update <shortcut>            (SET in red)
+  KEEP: <shortcut>                (KEEP in green)
+  INIT: <shortcut> -> <target>    (INIT in red)
+   SET: Update <shortcut>         (SET in red)
 
 Notes:
 - Configuration is in config.psd1 (StartMenuShortcuts section)
@@ -209,7 +209,7 @@ foreach ($desired in $shortcuts) {
 
   # Shortcut exists - check if it matches
   if (Test-ShortcutMatches -Actual $actual -Desired $desired) {
-    Write-ActionLine -Kind "KEEP" -Message "$($desired.Name) is correct"
+    Write-ActionLine -Kind "KEEP" -Message "$($desired.Name)"
     continue
   }
 
