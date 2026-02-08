@@ -42,15 +42,18 @@ winget install --exact --source winget --id Git.Git
 
 Must be run from *elevated* PowerShell.
 Will need to be re-run later when apps referred by here are installed.
+You can do a dryrun first to see planned changes:
 
 ```powershell
 cd c:\my\own\setup
-.\setup.ps1           # Preview all changes (dry run mode)
+.\setup.ps1
 
 ```
 
+Apply all changes if they seem fine:
+
 ```powershell
-.\setup.ps1 run       # Apply all changes if they seem fine
+.\setup.ps1 run
 
 ```
 
