@@ -44,8 +44,12 @@ Must be run from *elevated* PowerShell.
 Will need to be re-run later when apps referred by here are installed.
 
 ```powershell
+cd c:\my\own\setup
 .\setup.ps1           # Preview all changes (dry run mode)
-.\setup.ps1 run       # Apply all changes
+```
+
+```powershell
+.\setup.ps1 run       # Apply all changes if they seem fine
 ```
 
 All configuration is centralized in [setup/config.psd1]() for easy customization.
@@ -68,4 +72,5 @@ winget install --exact --source winget --id MartiCliment.UniGetUI
 ## Manual setup steps
 
 * Filco TKL keyboard. For connection, press "clear device button", Ctrl-Alt-Fn, 1-4
+* MX Anywhere Mouse: toggle clicky/smooth scroll with lower-left-side button
 
