@@ -143,7 +143,7 @@
       @{
         Name             = "dansk.ahk.lnk"
         Target           = "%ProgramFiles%\AutoHotkey\v2\AutoHotkey64.exe"
-        Arguments        = "<SETUPROOT>\config\AutoHotKey\dansk.ahk"
+        Arguments        = "<SETUPROOT>\for\AutoHotKey\dansk.ahk"
         WorkingDirectory = ""
       }
       @{
