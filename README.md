@@ -46,10 +46,12 @@ Will need to be re-run later when apps referred by here are installed.
 ```powershell
 cd c:\my\own\setup
 .\setup.ps1           # Preview all changes (dry run mode)
+
 ```
 
 ```powershell
 .\setup.ps1 run       # Apply all changes if they seem fine
+
 ```
 
 All configuration is centralized in [setup/config.psd1]() for easy customization.
