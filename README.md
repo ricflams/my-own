@@ -79,4 +79,15 @@ winget install --exact --source winget --id MartiCliment.UniGetUI
 * Filco TKL keyboard. For connection, press "clear device button", Ctrl-Alt-Fn, 1-4
 * MX Anywhere Mouse: toggle clicky/smooth scroll with lower-left-side button
 * [Visual Studio](https://visualstudio.microsoft.com/)
-
+* Outlook:
+    *  View > Change View > Compact
+    *  View > Layout > Reading Pane > Bottom
+* Ubuntu:
+  ```
+  sudo apt update && sudo apt full-upgrade -y
+  sudo apt autoremove -y
+  ```
+  Then in Powershell:
+  ```
+  wsl --shutdown
+  ```
