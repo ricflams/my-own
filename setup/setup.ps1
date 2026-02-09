@@ -49,6 +49,14 @@ if ($LASTEXITCODE -ne 0) {
   exit $LASTEXITCODE
 }
 
+Write-Host "=== Running setup-wsl ===" -ForegroundColor Cyan
+& "$scriptDir\scripts\setup-wsl.ps1" $Mode
+
+# Check exit code: 0 = no changes, 1 = changes were made
+if ($LASTEXITCODE -ne 0) {
+  exit $LASTEXITCODE
+}
+
 Write-Host "=== Running setup-preferences ===" -ForegroundColor Cyan
 & "$scriptDir\scripts\setup-preferences.ps1" $Mode
 
