@@ -115,7 +115,7 @@
       StartingDirectory = "C:\my"
     }
     @{ 
-      Match = @{ Source = "CanonicalGroupLimited.Ubuntu22.04LTS_79rhkp1fndgsc"; Name = "Ubuntu 22.04.5 LTS" }
+      Match = @{ Source = "CanonicalGroupLimited.Ubuntu22.04LTS_79rhkp1fndgsc"; Name = "Ubuntu 22.*" }
       Hidden = $false
       StartingDirectory = "~"
     }
