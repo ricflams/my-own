@@ -116,18 +116,10 @@ foreach ($distro in $installedDistros) {
 
 if (-not $hasUpdates) {
   Write-Host "No changes needed" -ForegroundColor Green
-  exit 0
 }
 
-if ($Mode -eq "dryrun") {
+if ($hasUpdates -and $Mode -eq "dryrun") {
   Write-Host "WSL not installed in dry run" -ForegroundColor DarkGray
-} else {
-  Write-Host "WSL was installed and restart is required" -ForegroundColor Yellow
-  $response = Read-Host "Restart now? (y/n)"
-  if ($response -eq "y" -or $response -eq "Y") {
-    Write-Host "Restarting..." -ForegroundColor Yellow
-    Restart-Computer
-  }
 }
 
-exit 1
+exit 0
