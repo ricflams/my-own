@@ -126,12 +126,10 @@
     @{ 
       Match = @{ Name = "Developer Command Prompt for VS 18" }
       Hidden = $false
-      RemoveSource = $true
     }
     @{ 
       Match = @{ Name = "Developer PowerShell for VS 18" }
       Hidden = $true
-      RemoveSource = $true
     }
     @{ 
       Match = @{ Source = "Windows.Terminal.Wsl"; Name = "Ubuntu*" }

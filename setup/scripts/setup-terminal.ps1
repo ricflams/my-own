@@ -208,8 +208,9 @@ foreach ($profile in $settings.profiles.list) {
       }
     }
 
-    # Optionally remove source property (convert to static profile)
-    if ($match.Config.RemoveSource -and ($profile.PSObject.Properties.Name -contains "source")) {
+    # Remove source property to prevent Windows Terminal from regenerating the profile
+    # If we're modifying a dynamic profile, convert it to static to preserve changes
+    if (($changes.Count -gt 0) -and ($profile.PSObject.Properties.Name -contains "source")) {
       $changes += "remove source property (convert to static profile)"
       $hasUpdates = $true
       if ($Mode -eq "run") {
