@@ -115,7 +115,7 @@
       StartingDirectory = "C:\my"
     }
     @{ 
-      Match = @{ Source = "CanonicalGroupLimited.Ubuntu22.04LTS_79rhkp1fndgsc"; Name = "Ubuntu 22.*" }
+      Match = @{ Source = "CanonicalGroupLimited.Ubuntu*"; Name = "Ubuntu*" }
       Hidden = $false
       StartingDirectory = "~"
     }
@@ -134,7 +134,11 @@
       RemoveSource = $true
     }
     @{ 
-      Match = @{ Source = "Windows.Terminal.Wsl"; Name = "Ubuntu-22.04" }
+      Match = @{ Source = "Windows.Terminal.Wsl"; Name = "Ubuntu*" }
+      Hidden = $true
+    }
+    @{ 
+      Match = @{ Source = "Microsoft.WSL"; Name = "Ubuntu*" }
       Hidden = $true
     }
     @{ 
