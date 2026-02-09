@@ -94,9 +94,11 @@ $installedDistros = Get-InstalledDistros
 
 $hasUpdates = $false
 
-# Check if desired distro is installed
-if ($installedDistros -contains $desiredDistro) {
-  Write-ActionLine -Kind "KEEP" -Message ("{0} is installed" -f $desiredDistro)
+# Check if desired distro is installed (prefix match, e.g. "Ubuntu" matches "Ubuntu-22.04")
+$matchingDistro = $installedDistros | Where-Object { $_ -like "$desiredDistro*" } | Select-Object -First 1
+
+if ($matchingDistro) {
+  Write-ActionLine -Kind "KEEP" -Message ("{0} is installed" -f $matchingDistro)
 } else {
   Write-ActionLine -Kind "INIT" -Message ("{0} will be installed" -f $desiredDistro)
   $hasUpdates = $true
@@ -109,7 +111,7 @@ if ($installedDistros -contains $desiredDistro) {
 
 # Show other installed distros for reference
 foreach ($distro in $installedDistros) {
-  if ($distro -ne $desiredDistro) {
+  if ($distro -ne $matchingDistro) {
     Write-ActionLine -Kind "KEEP" -Message ("{0} is installed" -f $distro)
   }
 }
