@@ -212,7 +212,7 @@ foreach ($c in $config.Preferences.DesiredCommands) {
     # Get current value
     $current = (& git config --global --get $key 2>$null)
     if ($current -is [System.Array]) { $current = ($current -join "`n") }
-    $current = ([string]$current).Trim()
+    $current = if ($current) { ([string]$current).Trim() } else { "" }
     
     if ([string]::IsNullOrWhiteSpace($current)) {
       Write-ActionLine -Kind "INIT" -Message ("{0} set to {1}" -f $target, $value)
