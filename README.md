@@ -13,7 +13,7 @@ All user-created content lives under `c:\my`.
 
 ## How to setup
 
-Run these commands in Powershell.
+Many commands need to **Run as Administrator** so you might as well use it for all.
 
 ### The c:\my structure
 
@@ -29,12 +29,19 @@ md c:\my\work
 
 ### Chrome, git, and install-scripts
 
-For passwords, git, and the actual automation:
+Very first steps: Chrome for passwords, git for fetching this repo's scripts.
+Make sure to run as administrator so they're installed machine-wide.
 
 ```
-winget install --exact --source winget --id Google.Chrome
-winget install --exact --source winget --id Git.Git
-& $env:LOCALAPPDATA\Programs\Git\cmd\git.exe clone https://github.com/ricflams/my-own.git c:\my\own
+& {
+    if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole('Administrators')) { 
+        Write-Error "Run this as Administrator to have Chrome and Git installed machine-wide"
+        return
+    }
+    winget install --exact --source winget --scope machine --id Google.Chrome
+    winget install --exact --source winget --scope machine --id Git.Git
+    & $env:ProgramFiles\Git\cmd\git.exe clone https://github.com/ricflams/my-own.git c:\my\own
+}
 
 ```
 
