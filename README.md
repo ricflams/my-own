@@ -45,6 +45,15 @@ Make explicitly sure to run as administrator so they are installed machine-wide.
 
 ```
 
+Clone this repo to get the scripts to run next.
+(Shown here with full git-path so you don't have to start another shell)
+
+```
+& $env:ProgramFiles\Git\cmd\git.exe clone https://github.com/ricflams/my-own.git c:\my\own
+
+```
+
+
 ### Setup Windows
 
 Must be run from *elevated* PowerShell.
