@@ -106,42 +106,28 @@
   # ----------------------------------------------------------------------------
   # Windows Terminal Profiles
   # ----------------------------------------------------------------------------
-  # Pattern matching: Use wildcards (*) in Source or Name
-  # Preference is implicit: first in list = highest priority (becomes defaultProfile)
+  # Whitelist of profiles to make visible in Windows Terminal
+  # Pattern matching:
+  #   - Name: String or array of strings. Uses "contains" matching (e.g., "Ubuntu" matches "Ubuntu 24.04 LTS")
+  #     If array, tries each in order (most specific first) - first match wins
+  #   - PreferredSource (optional): Uses "contains" matching (e.g., "CanonicalGroup" matches "CanonicalGroupLimited.Ubuntu...")
+  #     For each name pattern, tries with PreferredSource first, then without
+  # First in list = highest priority (becomes defaultProfile)
+  # All other profiles remain in settings.json but are hidden
   WindowsTerminalProfiles = @(
     @{ 
-      Match = @{ Source = "Windows.Terminal.PowershellCore"; Name = "PowerShell" }
-      Hidden = $false
+      Match = @{ Name = "PowerShell"; PreferredSource = "Windows.Terminal.PowershellCore" }
       StartingDirectory = "C:\my"
     }
     @{ 
-      Match = @{ Source = "CanonicalGroupLimited.Ubuntu*"; Name = "Ubuntu*" }
-      Hidden = $false
+      Match = @{ Name = @("Ubuntu-24.04", "Ubuntu 24.04", "Ubuntu"); PreferredSource = "CanonicalGroupLimited.Ubuntu" }
       StartingDirectory = "~"
     }
     @{ 
       Match = @{ Name = "Command Prompt" }
-      Hidden = $false
     }
     @{ 
-      Match = @{ Name = "Developer Command Prompt for VS 18" }
-      Hidden = $false
-    }
-    @{ 
-      Match = @{ Name = "Developer PowerShell for VS 18" }
-      Hidden = $true
-    }
-    @{ 
-      Match = @{ Source = "Windows.Terminal.Wsl"; Name = "Ubuntu*" }
-      Hidden = $true
-    }
-    @{ 
-      Match = @{ Source = "Microsoft.WSL"; Name = "Ubuntu*" }
-      Hidden = $true
-    }
-    @{ 
-      Match = @{ Name = "Windows PowerShell" }
-      Hidden = $true
+      Match = @{ Name = @("Developer Command Prompt for VS 18", "Developer Command Prompt") }
     }
   )
 
