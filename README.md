@@ -101,3 +101,6 @@ Configure the app-installer, WinGetUI:
   ```
   wsl --shutdown
   ```
+* VS Code
+    * Sign in to sync: richard@flamsholt.dk (Microsoft)
+    * Sign in to Copilot: via github
