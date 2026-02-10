@@ -1,12 +1,12 @@
 <#
-setup-wsl.ps1
+wsl.ps1
 
 Installs WSL and a Linux distribution after the WSL feature has been enabled.
-Run this after setup-features.ps1 has enabled the Microsoft-Windows-Subsystem-Linux feature.
+Run this after features.ps1 has enabled the Microsoft-Windows-Subsystem-Linux feature.
 
 Usage:
-  .\setup-wsl.ps1         # Dry run mode (default)
-  .\setup-wsl.ps1 run     # Apply changes
+  .\wsl.ps1         # Dry run mode (default)
+  .\wsl.ps1 run     # Apply changes
 
 Output:
   KEEP: <distro> is installed    (KEEP in green)

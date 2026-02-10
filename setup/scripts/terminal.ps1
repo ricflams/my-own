@@ -1,5 +1,5 @@
 <#
-setup-terminal.ps1
+terminal.ps1
 
 Manages Windows Terminal profile visibility and properties.
 
@@ -10,8 +10,8 @@ For each profile in settings.json:
 - Sets defaultProfile to first whitelisted profile
 
 Usage:
-  .\setup-terminal.ps1         # Dry run mode (default)
-  .\setup-terminal.ps1 run     # Apply changes
+  .\terminal.ps1         # Dry run mode (default)
+  .\terminal.ps1 run     # Apply changes
 
 Output:
   Lists all visible and hidden profiles with their source and name

@@ -2,11 +2,12 @@
 setup.ps1
 
 Master orchestrator script that runs all Windows setup automation scripts in sequence:
-- setup-features.ps1 (Windows optional features)
-- setup-preferences.ps1 (Registry and command settings)
-- setup-configfiles.ps1 (Configuration file management)
-- setup-terminal.ps1 (Windows Terminal profiles)
-- setup-startmenu.ps1 (Start Menu shortcuts)
+- features.ps1 (Windows optional features)
+- wsl.ps1 (WSL and Linux distribution installation)
+- preferences.ps1 (Registry and command settings)
+- configfiles.ps1 (Configuration file management)
+- terminal.ps1 (Windows Terminal profiles)
+- startmenu.ps1 (Start Menu shortcuts)
 
 Usage:
   .\setup.ps1         # Dry run mode (default)
@@ -39,27 +40,27 @@ if (-not $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administra
 
 $scriptDir = Split-Path -Path $MyInvocation.MyCommand.Definition -Parent
 
-Write-Host "=== Running setup-features ===" -ForegroundColor Cyan
+Write-Host "=== Running features ===" -ForegroundColor Cyan
 
-# Run setup-features script
-& "$scriptDir\scripts\setup-features.ps1" $Mode
+# Run features script
+& "$scriptDir\scripts\features.ps1" $Mode
 
 # Check exit code: 0 = no changes, 1 = changes were made
 if ($LASTEXITCODE -ne 0) {
   exit $LASTEXITCODE
 }
 
-Write-Host "=== Running setup-wsl ===" -ForegroundColor Cyan
-& "$scriptDir\scripts\setup-wsl.ps1" $Mode
+Write-Host "=== Running wsl ===" -ForegroundColor Cyan
+& "$scriptDir\scripts\wsl.ps1" $Mode
 
-Write-Host "=== Running setup-preferences ===" -ForegroundColor Cyan
-& "$scriptDir\scripts\setup-preferences.ps1" $Mode
+Write-Host "=== Running preferences ===" -ForegroundColor Cyan
+& "$scriptDir\scripts\preferences.ps1" $Mode
 
-Write-Host "=== Running setup-configfiles ===" -ForegroundColor Cyan
-& "$scriptDir\scripts\setup-configfiles.ps1" $Mode
+Write-Host "=== Running configfiles ===" -ForegroundColor Cyan
+& "$scriptDir\scripts\configfiles.ps1" $Mode
 
-Write-Host "=== Running setup-terminal ===" -ForegroundColor Cyan
-& "$scriptDir\scripts\setup-terminal.ps1" $Mode
+Write-Host "=== Running terminal ===" -ForegroundColor Cyan
+& "$scriptDir\scripts\terminal.ps1" $Mode
 
-Write-Host "=== Running setup-startmenu ===" -ForegroundColor Cyan
-& "$scriptDir\scripts\setup-startmenu.ps1" $Mode
+Write-Host "=== Running startmenu ===" -ForegroundColor Cyan
+& "$scriptDir\scripts\startmenu.ps1" $Mode
