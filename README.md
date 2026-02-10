@@ -13,7 +13,7 @@ All user-created content lives under `c:\my`.
 
 ## How to setup
 
-Run these commands in Powershell.
+Many commands need to **Run as Administrator** so you might as well use it for all.
 
 ### The c:\my structure
 
@@ -29,18 +29,33 @@ md c:\my\work
 
 ### Chrome, git, and install-scripts
 
-For passwords, git, and the actual automation:
+Very first steps: Chrome for passwords, git for fetching this repo, WinGetUI for upcoming apps.
+Make explicitly sure to run as administrator so they are installed machine-wide.
 
 ```
-winget install --exact --source winget --id Google.Chrome
-winget install --exact --source winget --id Git.Git
-& $env:LOCALAPPDATA\Programs\Git\cmd\git.exe clone https://github.com/ricflams/my-own.git c:\my\own
+& {
+    if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole('Administrators')) { 
+        Write-Error "Run this as Administrator to have Chrome and Git installed machine-wide"
+        return
+    }
+    winget install --exact --source winget --scope machine --id Google.Chrome
+    winget install --exact --source winget --scope machine --id Git.Git
+    winget install --exact --source winget --scope machine --id MartiCliment.UniGetUI
+}
 
 ```
+
+Then **re-open another Powershell window** to get Git in your path for next steps.
+
+```
+& git clone https://github.com/ricflams/my-own.git c:\my\own
+
+```
+
 
 ### Setup Windows
 
-Must be run from *elevated* PowerShell.
+Shall be **Run as Administrator**.
 Will need to be re-run later when apps referred by here are installed.
 You can do a dryrun first to see planned changes:
 
@@ -61,18 +76,13 @@ All configuration is centralized in [setup/config.psd1]() for easy customization
 
 ### WinGetUI
 
-Install my preferred app-installer, WinGetUI, and configure it.
+Configure the app-installer, WinGetUI:
 
-```
-winget install --exact --source winget --id MartiCliment.UniGetUI
-
-```
-
- Settings > Backup and Restore:
-
-  * Login with GitHub
-  * Periodically perform a cloud backup [X]
-  * Restore backup from cloud and Restore all apps
+  * Settings > Backup and Restore:
+      * Login with GitHub
+      * Periodically perform a cloud backup [X]
+      * Pick a backup to restore
+  * Then restore the apps you want
 
 ## Manual setup steps
 
@@ -91,3 +101,6 @@ winget install --exact --source winget --id MartiCliment.UniGetUI
   ```
   wsl --shutdown
   ```
+* VS Code
+    * Sign in to sync: richard@flamsholt.dk (Microsoft)
+    * Sign in to Copilot: via github
