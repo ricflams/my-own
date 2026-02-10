@@ -45,12 +45,10 @@ Make explicitly sure to run as administrator so they are installed machine-wide.
 
 ```
 
-Clone this repo to get the scripts to run next.
-
-_(Shown here with full git-path so you don't have to start another shell)_
+Then **re-open another Powershell window** to get Git in your path for next steps.
 
 ```
-& $env:ProgramFiles\Git\cmd\git.exe clone https://github.com/ricflams/my-own.git c:\my\own
+& git clone https://github.com/ricflams/my-own.git c:\my\own
 
 ```
 
