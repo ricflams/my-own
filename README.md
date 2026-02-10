@@ -29,7 +29,7 @@ md c:\my\work
 
 ### Chrome, git, and install-scripts
 
-Very first steps: Chrome for passwords, git for fetching this repo's scripts.
+Very first steps: Chrome for passwords, git for fetching this repo, WinGetUI for upcoming apps.
 Make explicitly sure to run as administrator so they are installed machine-wide.
 
 ```
@@ -40,6 +40,7 @@ Make explicitly sure to run as administrator so they are installed machine-wide.
     }
     winget install --exact --source winget --scope machine --id Google.Chrome
     winget install --exact --source winget --scope machine --id Git.Git
+    winget install --exact --source winget --scope machine --id MartiCliment.UniGetUI
 }
 
 ```
@@ -56,7 +57,7 @@ _(Shown here with full git-path so you don't have to start another shell)_
 
 ### Setup Windows
 
-Must be run from *elevated* PowerShell.
+Shall be **Run as Administrator**.
 Will need to be re-run later when apps referred by here are installed.
 You can do a dryrun first to see planned changes:
 
@@ -77,18 +78,13 @@ All configuration is centralized in [setup/config.psd1]() for easy customization
 
 ### WinGetUI
 
-Install my preferred app-installer, WinGetUI, and configure it.
+Configure the app-installer, WinGetUI:
 
-```
-winget install --exact --source winget --id MartiCliment.UniGetUI
-
-```
-
- Settings > Backup and Restore:
-
-  * Login with GitHub
-  * Periodically perform a cloud backup [X]
-  * Restore backup from cloud and Restore all apps
+  * Settings > Backup and Restore:
+      * Login with GitHub
+      * Periodically perform a cloud backup [X]
+      * Pick a backup to restore
+  * Then restore the apps you want
 
 ## Manual setup steps
 
