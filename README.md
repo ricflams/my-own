@@ -30,7 +30,7 @@ md c:\my\work
 ### Chrome, git, and install-scripts
 
 Very first steps: Chrome for passwords, git for fetching this repo's scripts.
-Make sure to run as administrator so they're installed machine-wide.
+Make explicitly sure to run as administrator so they are installed machine-wide.
 
 ```
 & {
