@@ -40,13 +40,12 @@ Make explicitly sure to run as administrator so they are installed machine-wide.
     }
     winget install --exact --source winget --scope machine --id Google.Chrome
     winget install --exact --source winget --scope machine --id Git.Git
-    & $env:ProgramFiles\Git\cmd\git.exe clone https://github.com/ricflams/my-own.git c:\my\own
 }
 
 ```
 
 Clone this repo to get the scripts to run next.
-(Shown here with full git-path so you don't have to start another shell)
+_(Shown here with full git-path so you don't have to start another shell)_
 
 ```
 & $env:ProgramFiles\Git\cmd\git.exe clone https://github.com/ricflams/my-own.git c:\my\own
