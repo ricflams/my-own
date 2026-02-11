@@ -108,3 +108,8 @@ Configure the app-installer, WinGetUI:
 * VS Code
     * Sign in to sync: richard@flamsholt.dk (Microsoft)
     * Sign in to Copilot: via github
+* ResophNotes
+    * Synchronize with Simplenote
+    * Minimize when press ESC
+    * Start minimized
+    * Enable Global Hot-Key, Ctrl-Alt-Win-R
