@@ -65,7 +65,7 @@ cd c:\my\own\setup
 
 ```
 
-Apply all changes if they seem fine:
+Note that before applying the changes you
 
 ```powershell
 .\setup.ps1 run
@@ -78,6 +78,8 @@ All configuration is centralized in [setup/config.psd1]() for easy customization
 
 Configure the app-installer, WinGetUI:
 
+  * settings > Package managers preference > WinGet:
+      * Installation scope: Machine|Global + Apply
   * Settings > Backup and Restore:
       * Login with GitHub
       * Periodically perform a cloud backup [X]
