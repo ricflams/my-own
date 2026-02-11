@@ -113,3 +113,5 @@ Configure the app-installer, WinGetUI:
     * Minimize when press ESC
     * Start minimized
     * Enable Global Hot-Key, Ctrl-Alt-Win-R
+* Slack
+    * Preferences > Advanced: Launch app on login
