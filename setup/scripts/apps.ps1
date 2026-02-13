@@ -463,12 +463,8 @@ foreach ($app in $appsToProcess) {
 
     # Case 2: App installed but scope unknown (not in winget source)
     if ($state.ScopeUnknown) {
-      Write-ActionLine -Kind "KEEP" -Message $name -Scope "scope:unknown"
-      if ($state.Version) {
-        Write-Detail "Installed via non-winget source - Version: $($state.Version)"
-      } else {
-        Write-Detail "Installed via non-winget source"
-      }
+      $versionDisplay = if ($state.Version) { "$($state.Version)" } else { "unknown" }
+      Write-ActionLine -Kind "KEEP" -Message $name -Scope "scope:unknown, $versionDisplay"
       $counters.Kept++
       continue
     }
@@ -477,12 +473,17 @@ foreach ($app in $appsToProcess) {
     $currentScope = if ($state.Scope) { $state.Scope.ToLower() } else { $null }
     
     if ($desiredScope -and $desiredScope -ne 'none' -and $currentScope -and $currentScope -ne 'none' -and $currentScope -ne $desiredScope) {
-      # Check if there's also a version upgrade available
-      if ($state.UpgradeAvailable -and $state.AvailableVersion) {
-        Write-ActionLine -Kind "CHANGE" -Message $name -Scope "scope:$currentScope to scope:$desiredScope, $($state.Version) to $($state.AvailableVersion)"
-      } else {
-        Write-ActionLine -Kind "CHANGE" -Message $name -Scope "scope:$currentScope to scope:$desiredScope"
-      }
+      # Build scope and version display
+      $scopeStr = "scope:$currentScope to scope:$desiredScope"
+      $versionStr = if ($state.Version) {
+        # Check if there's also a version upgrade available (and not self-updating)
+        if ($state.UpgradeAvailable -and $state.AvailableVersion -and -not $app.SelfUpdating) {
+          "$($state.Version) to $($state.AvailableVersion)"
+        } else {
+          $state.Version
+        }
+      } else { "unknown" }
+      Write-ActionLine -Kind "CHANGE" -Message $name -Scope "$scopeStr, $versionStr"
       $counters.Upgraded++
       
       if ($Mode -eq 'run') {
@@ -532,11 +533,25 @@ foreach ($app in $appsToProcess) {
 
     # Case 4: App installed at correct scope, upgrade available
     if ($state.UpgradeAvailable) {
-      if ($state.AvailableVersion) {
-        Write-ActionLine -Kind "UPDATE" -Message $name -Scope "$($state.Version) to $($state.AvailableVersion)"
-      } else {
-        Write-ActionLine -Kind "UPDATE" -Message "$name upgrade to latest version"
+      # Check if app is self-updating - if so, treat as KEEP with notation
+      if ($app.SelfUpdating) {
+        $scopeStr = if ($desiredScope -and $desiredScope -ne 'none') { "scope:$desiredScope" } else { "scope:$currentScope" }
+        $versionStr = if ($state.Version) { "$($state.Version) is self-updating" } else { "unknown is self-updating" }
+        Write-ActionLine -Kind "KEEP" -Message $name -Scope "$scopeStr, $versionStr"
+        $counters.Kept++
+        continue
       }
+      
+      # Normal upgrade path
+      $scopeStr = if ($desiredScope -and $desiredScope -ne 'none') { "scope:$desiredScope" } else { "scope:$currentScope" }
+      $versionStr = if ($state.AvailableVersion -and $state.Version) {
+        "$($state.Version) to $($state.AvailableVersion)"
+      } elseif ($state.Version) {
+        "$($state.Version) to latest"
+      } else {
+        "upgrade to latest"
+      }
+      Write-ActionLine -Kind "UPDATE" -Message $name -Scope "$scopeStr, $versionStr"
       $counters.Upgraded++
       
       if ($Mode -eq 'run') {
@@ -561,8 +576,15 @@ foreach ($app in $appsToProcess) {
     }
 
     # Case 5: App installed at correct scope, latest version
-    $scopeDisplay = if ($desiredScope -and $desiredScope -ne 'none') { "scope:$desiredScope" } else { $null }
-    Write-ActionLine -Kind "KEEP" -Message $name -Scope $scopeDisplay
+    $scopeStr = if ($desiredScope -and $desiredScope -ne 'none') { "scope:$desiredScope" } else { "scope:$currentScope" }
+    $versionStr = if ($state.Version) {
+      if ($app.SelfUpdating) {
+        "$($state.Version) is self-updating"
+      } else {
+        $state.Version
+      }
+    } else { "unknown" }
+    Write-ActionLine -Kind "KEEP" -Message $name -Scope "$scopeStr, $versionStr"
     $counters.Kept++
 
   } catch {

@@ -183,14 +183,13 @@
       @{ Scope = 'machine'; Id = 'Git.Git';                          Name = 'Git' }
       @{ Scope = 'user';    Id = 'GitHub.Copilot';                   Name = 'GitHub Copilot CLI' }
       @{ Scope = 'machine'; Id = 'GitExtensionsTeam.GitExtensions';  Name = 'Git Extensions' }
-      @{ Scope = 'machine'; Id = 'Google.Chrome';                    Name = 'Google Chrome' }
+      @{ Scope = 'machine'; Id = 'Google.Chrome';                    Name = 'Google Chrome'; SelfUpdating = $true }
       @{ Scope = 'user';    Id = 'JanDeDobbeleer.OhMyPosh';          Name = 'Oh My Posh' }
       #@{ Scope = 'machine'; Id = 'Koofr.Koofr';                      Name = 'Koofr' }
       @{ Scope = 'machine'; Id = 'MartiCliment.UniGetUI';            Name = 'UniGetUI' }
       @{ Scope = 'machine'; Id = 'Microsoft.PowerShell';             Name = 'PowerShell' }
       @{ Scope = 'machine'; Id = 'Microsoft.PowerToys';              Name = 'Microsoft PowerToys' }
-      @{ Scope = 'machine'; Id = 'Microsoft.VisualStudio.Community'; Name = 'Visual Studio Community' }
-      @{ Scope = 'user';    Id = 'Microsoft.VisualStudioCode';       Name = 'Visual Studio Code' }
+      @{ Scope = 'user';    Id = 'Microsoft.VisualStudioCode';       Name = 'Visual Studio Code'; SelfUpdating = $true }
       #@{ Scope = 'machine'; Id = 'Microsoft.WindowsTerminal';        Name = 'Windows Terminal' } Don't update Terminal from within a script running in the terminal!
       @{ Scope = 'machine'; Id = 'Mozilla.Firefox';                  Name = 'Mozilla Firefox' }
       @{ Scope = 'machine'; Id = 'Mythicsoft.FileLocator';           Name = 'FileLocator Pro/Lite' }
@@ -200,7 +199,7 @@
       @{ Scope = 'none';    Id = 'Python.Python.3.14';               Name = 'Python 3.14 (pip)' }
       @{ Scope = 'machine'; Id = 'ScooterSoftware.BeyondCompare.5';  Name = 'Beyond Compare 5' }
       @{ Scope = 'machine'; Id = 'ShareX.ShareX';                    Name = 'ShareX' }
-      @{ Scope = 'user';    Id = 'SlackTechnologies.Slack';          Name = 'Slack' }
+      @{ Scope = 'user';    Id = 'SlackTechnologies.Slack';          Name = 'Slack'; SelfUpdating = $true }
       @{ Scope = 'machine'; Id = 'voidtools.Everything';             Name = 'Everything' }
       @{ Scope = 'machine'; Id = 'Volta.Volta';                      Name = 'Volta' }
       @{ Scope = 'machine'; Id = 'WinDirStat.WinDirStat';            Name = 'WinDirStat' }
@@ -215,6 +214,7 @@
       #@{ Scope = 'machine'; Id = 'GeoGebra.Classic.5';               Name = 'GeoGebra Classic 5' } Installer hash does not match
       @{ Scope = 'machine'; Id = 'Google.GoogleDrive';               Name = 'Google Drive' }
       @{ Scope = 'none';    Id = 'Gyan.FFmpeg';                      Name = 'FFmpeg' }
+      @{ Scope = 'machine'; Id = 'Microsoft.VisualStudio.Community'; Name = 'Visual Studio Community' }
       @{ Scope = 'machine'; Id = 'Pingman.PingPlotter';              Name = 'PingPlotter' }
       @{ Scope = 'machine'; Id = 'Racket.Racket';                    Name = 'Racket' }
       @{ Scope = 'machine'; Id = 'Valve.Steam';                      Name = 'Steam' }
@@ -223,7 +223,7 @@
 
     # Work-only apps (matches work computer name patterns)
     @{ For = @('AVD-SUD-P01043'); Apps = @(
-      @{ Scope = 'machine'; Id = 'Microsoft.Teams';                  Name = 'Microsoft Teams' }
+      @{ Scope = 'user';    Id = 'Microsoft.Teams';                  Name = 'Microsoft Teams' }
     )}
   )
 }
