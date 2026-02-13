@@ -142,39 +142,62 @@ function Find-BestMatchingProfile {
   }
 
   # For each name pattern, try with PreferredSource first, then without
+  # First pass: exact name matching
   foreach ($namePattern in $namePatterns) {
-    # Try with PreferredSource matching
+    # Try with PreferredSource matching - exact name
     if ($MatchCriteria.PreferredSource) {
-      foreach ($profile in $Profiles) {
-        $profileSource = if ($profile.source) { $profile.source } else { "" }
-        $profileName = if ($profile.name) { $profile.name } else { "" }
+      foreach ($p in $Profiles) {
+        $profileSource = if ($p.source) { $p.source } else { "" }
+        $profileName = if ($p.name) { $p.name } else { "" }
+        
+        $sourceMatch = $profileSource -match [regex]::Escape($MatchCriteria.PreferredSource)
+        if ($sourceMatch -and ($profileName -eq $namePattern)) {
+          return $p
+        }
+      }
+    }
+    
+    # Try without PreferredSource - exact name
+    foreach ($p in $Profiles) {
+      $profileName = if ($p.name) { $p.name } else { "" }
+      if ($profileName -eq $namePattern) {
+        return $p
+      }
+    }
+  }
+
+  # Second pass: substring matching (fallback)
+  foreach ($namePattern in $namePatterns) {
+    # Try with PreferredSource matching - substring
+    if ($MatchCriteria.PreferredSource) {
+      foreach ($p in $Profiles) {
+        $profileSource = if ($p.source) { $p.source } else { "" }
+        $profileName = if ($p.name) { $p.name } else { "" }
         
         $sourceMatch = $profileSource -match [regex]::Escape($MatchCriteria.PreferredSource)
         $nameMatch = $profileName -match [regex]::Escape($namePattern)
         
         if ($sourceMatch -and $nameMatch) {
-          return $profile
+          return $p
         }
       }
     }
     
-    # Try without PreferredSource (fallback)
-    foreach ($profile in $Profiles) {
-      $profileName = if ($profile.name) { $profile.name } else { "" }
-      $nameMatch = $profileName -match [regex]::Escape($namePattern)
-      
-      if ($nameMatch) {
-        return $profile
+    # Try without PreferredSource - substring
+    foreach ($p in $Profiles) {
+      $profileName = if ($p.name) { $p.name } else { "" }
+      if ($profileName -match [regex]::Escape($namePattern)) {
+        return $p
       }
     }
   }
 
   # PreferredSource-only match (if no name patterns specified)
   if ($MatchCriteria.PreferredSource -and $namePatterns.Count -eq 0) {
-    foreach ($profile in $Profiles) {
-      $profileSource = if ($profile.source) { $profile.source } else { "" }
+    foreach ($p in $Profiles) {
+      $profileSource = if ($p.source) { $p.source } else { "" }
       if ($profileSource -match [regex]::Escape($MatchCriteria.PreferredSource)) {
-        return $profile
+        return $p
       }
     }
   }
@@ -298,6 +321,38 @@ foreach ($profile in $settings.profiles.list) {
   }
 }
 
+# Reorder profiles using extract-and-append approach
+# Extract whitelisted profiles in order, then append remaining visible, then hidden
+$reorderedList = @()
+$remainingProfiles = $settings.profiles.list.Clone()
+
+# Extract whitelisted profiles in whitelist order
+foreach ($configEntry in $config.WindowsTerminalProfiles) {
+  # Find best matching profile in remaining list
+  $matchedProfile = Find-BestMatchingProfile -MatchCriteria $configEntry.Match -Profiles $remainingProfiles
+  
+  if ($matchedProfile) {
+    $reorderedList += $matchedProfile
+    $remainingProfiles = @($remainingProfiles | Where-Object { -not [object]::ReferenceEquals($_, $matchedProfile) })
+  }
+}
+
+# Separate remaining profiles by visibility
+$remainingVisible = @()
+$remainingHidden = @()
+foreach ($profile in $remainingProfiles) {
+  $currentHidden = if ($null -ne $profile.hidden) { $profile.hidden } else { $false }
+  if ($currentHidden) {
+    $remainingHidden += $profile
+  } else {
+    $remainingVisible += $profile
+  }
+}
+
+# Append remaining visible, then hidden
+$reorderedList += $remainingVisible
+$reorderedList += $remainingHidden
+
 # Set default profile to first whitelisted profile
 if ($config.WindowsTerminalProfiles.Count -gt 0) {
   # Find first whitelisted profile in reordered list
@@ -331,38 +386,6 @@ if ($config.WindowsTerminalProfiles.Count -gt 0) {
     }
   }
 }
-
-# Reorder profiles using extract-and-append approach
-# Extract whitelisted profiles in order, then append remaining visible, then hidden
-$reorderedList = @()
-$remainingProfiles = $settings.profiles.list.Clone()
-
-# Extract whitelisted profiles in whitelist order
-foreach ($configEntry in $config.WindowsTerminalProfiles) {
-  # Find best matching profile in remaining list
-  $matchedProfile = Find-BestMatchingProfile -MatchCriteria $configEntry.Match -Profiles $remainingProfiles
-  
-  if ($matchedProfile) {
-    $reorderedList += $matchedProfile
-    $remainingProfiles = @($remainingProfiles | Where-Object { -not [object]::ReferenceEquals($_, $matchedProfile) })
-  }
-}
-
-# Separate remaining profiles by visibility
-$remainingVisible = @()
-$remainingHidden = @()
-foreach ($profile in $remainingProfiles) {
-  $currentHidden = if ($null -ne $profile.hidden) { $profile.hidden } else { $false }
-  if ($currentHidden) {
-    $remainingHidden += $profile
-  } else {
-    $remainingVisible += $profile
-  }
-}
-
-# Append remaining visible, then hidden
-$reorderedList += $remainingVisible
-$reorderedList += $remainingHidden
 
 # Check if order changed
 $currentOrder = ($settings.profiles.list | ForEach-Object { $_.guid }) -join ","
