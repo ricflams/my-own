@@ -441,7 +441,7 @@ foreach ($app in $appsToProcess) {
       $counters.Installed++
       
       if ($Mode -eq 'run') {
-        $installArgs = @("install", "--id", $id, "--exact", "--silent", "--force", "--accept-source-agreements", "--accept-package-agreements")
+        $installArgs = @("install", "--id", $id, "--exact", "--disable-interactivity", "--force", "--accept-source-agreements", "--accept-package-agreements")
         if ($desiredScope -and $desiredScope -ne 'none') { $installArgs += @("--scope", $desiredScope) }
         $installOutput = & winget @installArgs 2>&1
         if ($LASTEXITCODE -ne 0) {
@@ -488,7 +488,7 @@ foreach ($app in $appsToProcess) {
       
       if ($Mode -eq 'run') {
         # Uninstall from current scope
-        $uninstallArgs = @("uninstall", "--id", $id, "--exact", "--silent", "--force")
+        $uninstallArgs = @("uninstall", "--id", $id, "--exact", "--disable-interactivity", "--force")
         if ($currentScope -and $currentScope -ne 'none') { $uninstallArgs += @("--scope", $currentScope) }
         $uninstallOutput = & winget @uninstallArgs 2>&1
         if ($LASTEXITCODE -ne 0) {
@@ -512,7 +512,7 @@ foreach ($app in $appsToProcess) {
         }
         
         # Install at desired scope
-        $reinstallArgs = @("install", "--id", $id, "--exact", "--silent", "--force", "--accept-source-agreements", "--accept-package-agreements")
+        $reinstallArgs = @("install", "--id", $id, "--exact", "--disable-interactivity", "--force", "--accept-source-agreements", "--accept-package-agreements")
         if ($desiredScope -and $desiredScope -ne 'none') { $reinstallArgs += @("--scope", $desiredScope) }
         $installOutput = & winget @reinstallArgs 2>&1
         if ($LASTEXITCODE -ne 0) {
@@ -557,7 +557,7 @@ foreach ($app in $appsToProcess) {
       if ($Mode -eq 'run') {
         # Note: Don't pass --scope to upgrade commands - app is already installed,
         # and some installers (burn, exe) don't support scope detection during upgrade
-        $upgradeArgs = @("upgrade", "--id", $id, "--exact", "--silent", "--force", "--accept-source-agreements", "--accept-package-agreements")
+        $upgradeArgs = @("upgrade", "--id", $id, "--exact", "--disable-interactivity", "--force", "--accept-source-agreements", "--accept-package-agreements")
         $upgradeOutput = & winget @upgradeArgs 2>&1
         if ($LASTEXITCODE -ne 0) {
           $errorMsg = Get-WingetErrorMessage -ExitCode $LASTEXITCODE
