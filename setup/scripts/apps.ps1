@@ -248,6 +248,7 @@ function Get-WingetErrorMessage {
   
   $errorMessages = @{
     "-1978334957" = "Package In Use"
+    "-1978334961" = "Sideloading Blocked By Policy" # Needs HKLM:\SOFTWARE\Policies\Microsoft\Windows\Appx\AllowAllTrustedApps = 1
     "-1978335189" = "Update Not Applicable"
     "-1978335209" = "No Applicable Installer"
     "-1978335210" = "MSIX Not Supported"
