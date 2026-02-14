@@ -115,3 +115,6 @@ Configure the app-installer, WinGetUI:
     * Enable Global Hot-Key, Ctrl-Alt-Win-R
 * Slack
     * Preferences > Advanced: Launch app on login
+* Powertoys
+    * ZoomIt enable
+      
