@@ -50,20 +50,26 @@ if ($LASTEXITCODE -ne 0) {
   exit $LASTEXITCODE
 }
 
+Write-Host ""
 Write-Host "=== Running wsl ===" -ForegroundColor Cyan
 & "$scriptDir\scripts\wsl.ps1" $Mode
 
+Write-Host ""
 Write-Host "=== Running preferences ===" -ForegroundColor Cyan
 & "$scriptDir\scripts\preferences.ps1" $Mode
 
+Write-Host ""
 Write-Host "=== Running configfiles ===" -ForegroundColor Cyan
 & "$scriptDir\scripts\configfiles.ps1" $Mode
 
+Write-Host ""
 Write-Host "=== Running dotfiles-sync ===" -ForegroundColor Cyan
 & "$scriptDir\scripts\dotfiles-sync.ps1" $Mode
 
+Write-Host ""
 Write-Host "=== Running terminal ===" -ForegroundColor Cyan
 & "$scriptDir\scripts\terminal.ps1" $Mode
 
+Write-Host ""
 Write-Host "=== Running startmenu ===" -ForegroundColor Cyan
 & "$scriptDir\scripts\startmenu.ps1" $Mode
