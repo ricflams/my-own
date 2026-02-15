@@ -104,6 +104,17 @@
   )
 
   # ----------------------------------------------------------------------------
+  # Dotfiles
+  # ----------------------------------------------------------------------------
+  # Files to sync between local system and repository using 3-way merge
+  # Each entry specifies a path relative to %USERPROFILE%
+  # Synced bidirectionally: changes in either location are detected and merged
+  DotFiles = @(
+    @{ Path = ".zshrc" }
+    @{ Path = ".claude\claude.md" }
+  )
+
+  # ----------------------------------------------------------------------------
   # Windows Terminal Profiles
   # ----------------------------------------------------------------------------
   # Whitelist of profiles to make visible in Windows Terminal
@@ -222,7 +233,7 @@
     )}
 
     # Work-only apps (matches work computer name patterns)
-    @{ For = @('AVD-SUD-P01043'); Apps = @(
+    @{ For = @('AVD-*'); Apps = @(
       @{ Scope = 'user';    Id = 'Microsoft.Teams';                     Name = 'Microsoft Teams' }
 	  @{ Scope = 'machine'; Id = 'Microsoft.VisualStudio.Professional'; Name = 'Visual Studio Professional' }
     )}

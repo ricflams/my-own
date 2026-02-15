@@ -59,6 +59,9 @@ Write-Host "=== Running preferences ===" -ForegroundColor Cyan
 Write-Host "=== Running configfiles ===" -ForegroundColor Cyan
 & "$scriptDir\scripts\configfiles.ps1" $Mode
 
+Write-Host "=== Running dotfiles-sync ===" -ForegroundColor Cyan
+& "$scriptDir\scripts\dotfiles-sync.ps1" $Mode
+
 Write-Host "=== Running terminal ===" -ForegroundColor Cyan
 & "$scriptDir\scripts\terminal.ps1" $Mode
 
