@@ -137,9 +137,14 @@ function Get-SyncAction {
     return "PUT"
   }
 
-  # 5. BASE == REMOTE -> GET
+  # 5. BASE == REMOTE -> GET (but only if LOCAL exists; if deleted locally, restore it)
   if ($BaseHash -eq $RemoteHash) {
-    return "GET"
+    if (![string]::IsNullOrEmpty($LocalHash)) {
+      return "GET"
+    } else {
+      # Local file was deleted/missing but repo unchanged - restore it
+      return "PUT"
+    }
   }
 
   # 6. Otherwise -> MERGE
