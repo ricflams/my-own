@@ -32,14 +32,10 @@ param(
   [string]$Mode = "dryrun"
 )
 
-$ErrorActionPreference = "Stop"
-
-$scriptDir = Split-Path -Path $MyInvocation.MyCommand.Definition -Parent
-$rootDir = Split-Path -Path $scriptDir -Parent
-
-# Load configuration
-$configPath = Join-Path $rootDir "config.psd1"
-$config = Import-PowerShellDataFile $configPath
+# Import common utilities
+. "$PSScriptRoot\common.ps1"
+$paths = Get-SetupPaths
+$config = Get-SetupConfig -RootDir $paths.RootDir
 
 # -----------------------------
 # Output helper
@@ -175,15 +171,15 @@ function Copy-DotFile {
 # -----------------------------
 Write-Host "Mode: $Mode" -ForegroundColor Cyan
 Write-Host "Local base: $env:USERPROFILE" -ForegroundColor Cyan
-Write-Host "Repo base: $rootDir" -ForegroundColor Cyan
+Write-Host "Repo base: $($paths.RootDir)" -ForegroundColor Cyan
 
 $hasChanges = $false
 
 foreach ($entry in $config.DotFiles) {
   $relativePath = $entry.Path
   $localPath = Join-Path $env:USERPROFILE $relativePath
-  $remotePath = Join-Path $rootDir "dotfiles\$relativePath"
-  $basePath = Join-Path $rootDir "dotfiles-base\$relativePath"
+  $remotePath = Join-Path $paths.RootDir "dotfiles\$relativePath"
+  $basePath = Join-Path $paths.RootDir "dotfiles-base\$relativePath"
 
   # Get file hashes
   $hashes = Get-FileHash3Way -LocalPath $localPath -RemotePath $remotePath -BasePath $basePath

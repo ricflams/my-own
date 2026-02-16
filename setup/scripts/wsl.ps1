@@ -23,21 +23,11 @@ param(
   [string]$Mode = "dryrun"
 )
 
-$ErrorActionPreference = "Stop"
-
-# Check for admin privileges
-$identity  = [Security.Principal.WindowsIdentity]::GetCurrent()
-$principal = [Security.Principal.WindowsPrincipal]$identity
-if (-not $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
-  Write-Error "Run this script from an elevated PowerShell as Administrator" -ErrorAction Stop
-}
-
-$scriptDir = Split-Path -Path $MyInvocation.MyCommand.Definition -Parent
-$rootDir = Split-Path -Path $scriptDir -Parent
-
-# Load configuration
-$configPath = Join-Path $rootDir "config.psd1"
-$config = Import-PowerShellDataFile $configPath
+# Import common utilities
+. "$PSScriptRoot\common.ps1"
+Assert-Administrator
+$paths = Get-SetupPaths
+$config = Get-SetupConfig -RootDir $paths.RootDir
 
 # -----------------------------
 # Output helper

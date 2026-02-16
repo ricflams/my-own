@@ -29,26 +29,22 @@ param(
   [string]$Mode = "dryrun"
 )
 
-$ErrorActionPreference = "Stop"
-
-$scriptDir = Split-Path -Path $MyInvocation.MyCommand.Definition -Parent
-$rootDir = Split-Path -Path $scriptDir -Parent
-
-# Load configuration
-$configPath = Join-Path $rootDir "config.psd1"
-$config = Import-PowerShellDataFile $configPath
+# Import common utilities
+. "$PSScriptRoot\common.ps1"
+$paths = Get-SetupPaths
+$config = Get-SetupConfig -RootDir $paths.RootDir
 
 # Resolve <SETUPROOT> placeholder in shortcuts
 $shortcuts = $config.StartMenuShortcuts | ForEach-Object {
   $shortcut = $_.Clone()
   if ($shortcut.Arguments) {
-    $shortcut.Arguments = $shortcut.Arguments -replace '<SETUPROOT>', $rootDir
+    $shortcut.Arguments = $shortcut.Arguments -replace '<SETUPROOT>', $paths.RootDir
   }
   if ($shortcut.WorkingDirectory) {
-    $shortcut.WorkingDirectory = $shortcut.WorkingDirectory -replace '<SETUPROOT>', $rootDir
+    $shortcut.WorkingDirectory = $shortcut.WorkingDirectory -replace '<SETUPROOT>', $paths.RootDir
   }
   if ($shortcut.IconLocation) {
-    $shortcut.IconLocation = $shortcut.IconLocation -replace '<SETUPROOT>', $rootDir
+    $shortcut.IconLocation = $shortcut.IconLocation -replace '<SETUPROOT>', $paths.RootDir
   }
   $shortcut
 }

@@ -29,21 +29,16 @@ param(
   [string]$Mode = "dryrun"
 )
 
-$ErrorActionPreference = "Stop"
+# Import common utilities
+. "$PSScriptRoot\scripts\common.ps1"
 
-# Check for admin privileges, also dryrun mode to give proper feedback of needed changes
-$identity  = [Security.Principal.WindowsIdentity]::GetCurrent()
-$principal = [Security.Principal.WindowsPrincipal]$identity
-if (-not $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
-  Write-Error "Run this script from an elevated PowerShell as Administrator" -ErrorAction Stop
-}
-
-$scriptDir = Split-Path -Path $MyInvocation.MyCommand.Definition -Parent
+# Check for admin privileges
+Assert-Administrator
 
 Write-Host "=== Running features ===" -ForegroundColor Cyan
 
 # Run features script
-& "$scriptDir\scripts\features.ps1" $Mode
+& "$PSScriptRoot\scripts\features.ps1" $Mode
 
 # Check exit code: 0 = no changes, 1 = changes were made
 if ($LASTEXITCODE -ne 0) {
@@ -52,24 +47,24 @@ if ($LASTEXITCODE -ne 0) {
 
 Write-Host ""
 Write-Host "=== Running wsl ===" -ForegroundColor Cyan
-& "$scriptDir\scripts\wsl.ps1" $Mode
+& "$PSScriptRoot\scripts\wsl.ps1" $Mode
 
 Write-Host ""
 Write-Host "=== Running preferences ===" -ForegroundColor Cyan
-& "$scriptDir\scripts\preferences.ps1" $Mode
+& "$PSScriptRoot\scripts\preferences.ps1" $Mode
 
 Write-Host ""
 Write-Host "=== Running configfiles ===" -ForegroundColor Cyan
-& "$scriptDir\scripts\configfiles.ps1" $Mode
+& "$PSScriptRoot\scripts\configfiles.ps1" $Mode
 
 Write-Host ""
 Write-Host "=== Running dotfiles-sync ===" -ForegroundColor Cyan
-& "$scriptDir\scripts\dotfiles-sync.ps1" $Mode
+& "$PSScriptRoot\scripts\dotfiles-sync.ps1" $Mode
 
 Write-Host ""
 Write-Host "=== Running terminal ===" -ForegroundColor Cyan
-& "$scriptDir\scripts\terminal.ps1" $Mode
+& "$PSScriptRoot\scripts\terminal.ps1" $Mode
 
 Write-Host ""
 Write-Host "=== Running startmenu ===" -ForegroundColor Cyan
-& "$scriptDir\scripts\startmenu.ps1" $Mode
+& "$PSScriptRoot\scripts\startmenu.ps1" $Mode

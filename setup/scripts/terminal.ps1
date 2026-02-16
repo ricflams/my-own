@@ -30,14 +30,10 @@ param(
   [string]$Mode = "dryrun"
 )
 
-$ErrorActionPreference = "Stop"
-
-$scriptDir = Split-Path -Path $MyInvocation.MyCommand.Definition -Parent
-$rootDir = Split-Path -Path $scriptDir -Parent
-
-# Load configuration
-$configPath = Join-Path $rootDir "config.psd1"
-$config = Import-PowerShellDataFile $configPath
+# Import common utilities
+. "$PSScriptRoot\common.ps1"
+$paths = Get-SetupPaths
+$config = Get-SetupConfig -RootDir $paths.RootDir
 
 # Windows Terminal settings path
 $settingsPath = Join-Path $env:LOCALAPPDATA "Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"

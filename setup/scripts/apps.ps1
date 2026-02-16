@@ -1,39 +1,22 @@
 <#
-.SYNOPSIS
+apps.ps1
+
 Installs and manages Windows applications using winget.
-
-.DESCRIPTION
-This script manages winget app installations in a data-driven, idempotent manner.
-It ensures apps are installed at the configured scope (user or machine) with the latest version.
-
-Features:
-- Matches current computer name against patterns in config (wildcards supported)
-- Installs apps based on For field (computer name patterns)
-- Respects per-app Scope configuration (user or machine)
-- Efficiently detects current installation state (installed, scope, version)
-- Handles apps installed via non-winget sources (treats as KEEP with unknown scope)
-- Reinstalls apps installed at wrong scope
-- Upgrades outdated apps to latest version
-- Supports dry-run mode to preview changes
 
 Usage:
   .\apps.ps1         # Dry run mode (default) - shows what would change
   .\apps.ps1 run     # Apply changes
 
 Output:
-  KEEP:    <app> (scope:xxx)                          (KEEP in green, scope in gray)
-           <app> (scope:unknown)                      (installed via non-winget source)
-  INSTALL: <app> (scope:xxx)                          (INSTALL in red, scope in gray)
-  UPDATE:  <app> (old-ver to new-ver)                 (UPDATE in yellow)
-  CHANGE:  <app> (scope:xxx to scope:yyy)             (CHANGE in yellow, scope in gray)
-           <app> (scope:xxx to scope:yyy, ver to ver) (CHANGE with version upgrade)
-  REMOVE:  <app> (scope:xxx)                          (REMOVE in red, scope in gray)
+  KEEP: <app> (scope:xxx)                        (KEEP in green)
+  INSTALL: <app> (scope:xxx)                     (INSTALL in red)
+  UPDATE: <app> (old-ver to new-ver)             (UPDATE in yellow)
+  CHANGE: <app> (scope:xxx to scope:yyy)         (CHANGE in yellow)
+  REMOVE: <app> (scope:xxx)                      (REMOVE in red)
 
 Notes:
 - Requires administrator privileges
-- Configuration in config.psd1 (WingetApps section with For/Apps structure)
-- Apps installed at configured scope (user or machine)
-- Individual app failures don't stop processing of other apps
+- Configuration is in config.psd1 (WingetApps section)
 #>
 
 param(
@@ -45,14 +28,9 @@ param(
   [switch]$DebugMode
 )
 
-$ErrorActionPreference = "Stop"
-
-# Check for admin privileges
-$identity  = [Security.Principal.WindowsIdentity]::GetCurrent()
-$principal = [Security.Principal.WindowsPrincipal]$identity
-if (-not $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
-  Write-Error "Run this script from an elevated PowerShell as Administrator" -ErrorAction Stop
-}
+# Import common utilities
+. "$PSScriptRoot\common.ps1"
+Assert-Administrator
 
 # Check winget is available
 try {
@@ -78,12 +56,8 @@ try {
   # Silently continue - may already be latest version from Store
 }
 
-$scriptDir = Split-Path -Path $MyInvocation.MyCommand.Definition -Parent
-$rootDir = Split-Path -Path $scriptDir -Parent
-
-# Load configuration
-$configPath = Join-Path $rootDir "config.psd1"
-$config = Import-PowerShellDataFile $configPath
+$paths = Get-SetupPaths
+$config = Get-SetupConfig -RootDir $paths.RootDir
 
 # Export installed packages list for efficient lookup
 if ($DebugMode) {
