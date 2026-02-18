@@ -38,6 +38,7 @@ Make explicitly sure to run as administrator so they are installed machine-wide.
         Write-Error "Run this as Administrator to have Chrome and Git installed machine-wide"
         return
     }
+    Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope LocalMachine
     winget install --exact --source winget --scope machine --id Google.Chrome
     winget install --exact --source winget --scope machine --id Git.Git
     winget install --exact --source winget --scope machine --id MartiCliment.UniGetUI
