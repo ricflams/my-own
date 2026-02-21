@@ -87,6 +87,14 @@
       @{ Type = "GitConfig"; Key = "init.defaultBranch"; Value = "main" }
       @{ Type = "GitConfig"; Key = "pull.rebase";       Value = "false" }
       @{ Type = "GitConfig"; Key = "core.autocrlf";     Value = "false" }
+      @{ Type = "GitConfig"; Key = "push.autoSetupRemote"; Value = "true" }
+
+ # 23        1.224 it config --global --add safe.directory "C:/code/*"
+ # 24        0.190 git config --global --add safe.directory "C:/my/code/*"
+ # 27        0.184 git config --global --add safe.directory "C:/code/*/worktrees/*"
+ # 28        0.185 git config --global --add safe.directory "C:/my/code/*/worktrees/*"
+
+	  
     )
   }
 
@@ -240,3 +248,5 @@
     )}
   )
 }
+
+
