@@ -200,6 +200,7 @@
       #@{ Scope = 'user';    Id = 'dahlbyk.posh-git';                    Name = 'Posh-Git' }
       @{ Scope = 'machine'; Id = 'Ghisler.TotalCommander';              Name = 'Total Commander' }
       @{ Scope = 'machine'; Id = 'Git.Git';                             Name = 'Git' }
+      @{ Scope = 'machine'; Id = 'GitHub.cli';                          Name = 'GitHub CLI' }
       @{ Scope = 'user';    Id = 'GitHub.Copilot';                      Name = 'GitHub Copilot CLI' }
       @{ Scope = 'machine'; Id = 'GitExtensionsTeam.GitExtensions';     Name = 'Git Extensions' }
       @{ Scope = 'machine'; Id = 'Google.Chrome';                       Name = 'Google Chrome'; SelfUpdating = $true }
@@ -248,5 +249,6 @@
     )}
   )
 }
+
 
 
