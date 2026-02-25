@@ -220,7 +220,6 @@
       @{ Scope = 'machine'; Id = 'ScooterSoftware.BeyondCompare.5';     Name = 'Beyond Compare 5' }
       @{ Scope = 'machine'; Id = 'ShareX.ShareX';                       Name = 'ShareX' }
       @{ Scope = 'user';    Id = 'SlackTechnologies.Slack';             Name = 'Slack'; SelfUpdating = $true }
-      @{ Scope = 'machine'; Id = 'Telerik.Fiddler.Everywhere';          Name = 'Fiddler'; }
       @{ Scope = 'machine'; Id = 'voidtools.Everything';                Name = 'Everything' }
       @{ Scope = 'machine'; Id = 'Volta.Volta';                         Name = 'Volta' }
       @{ Scope = 'machine'; Id = 'WinDirStat.WinDirStat';               Name = 'WinDirStat' }
@@ -249,6 +248,7 @@
     )}
   )
 }
+
 
 
 
