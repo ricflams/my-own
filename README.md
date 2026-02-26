@@ -13,9 +13,9 @@ All user-created content lives under `c:\my`.
 
 ## How to setup
 
-Many commands need to **Run as Administrator** so you might as well use it for all.
-
 ### The c:\my structure
+
+Run this in ordinary Powershell, not as administrator; else git will complain about ownership later on.
 
 ```
 md c:\my
@@ -29,8 +29,8 @@ md c:\my\work
 
 ### Chrome, git, and install-scripts
 
-Very first steps: Chrome for passwords, git for fetching this repo, WinGetUI for upcoming apps.
-Make explicitly sure to run as administrator so they are installed machine-wide.
+Very first steps: Chrome for passwords and git for fetching this repo.
+Make explicitly sure to **Run as Administrator** so they are installed machine-wide.
 
 ```
 & {
@@ -41,7 +41,6 @@ Make explicitly sure to run as administrator so they are installed machine-wide.
     Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope LocalMachine
     winget install --exact --source winget --scope machine --id Google.Chrome
     winget install --exact --source winget --scope machine --id Git.Git
-    winget install --exact --source winget --scope machine --id MartiCliment.UniGetUI
 }
 
 ```
