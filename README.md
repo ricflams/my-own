@@ -62,13 +62,15 @@ You can do a dryrun first to see planned changes:
 ```powershell
 cd c:\my\own\setup
 .\setup.ps1
+.\scripts\apps.ps1
 
 ```
 
-Note that before applying the changes you
+If all looks fine then apply the changes:
 
 ```powershell
 .\setup.ps1 run
+.\scripts\apps.ps1 run
 
 ```
 
