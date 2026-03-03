@@ -209,6 +209,9 @@
       @{ Scope = 'machine'; Id = 'MartiCliment.UniGetUI';               Name = 'UniGetUI' }
       @{ Scope = 'machine'; Id = 'Microsoft.PowerShell';                Name = 'PowerShell' }
       @{ Scope = 'machine'; Id = 'Microsoft.PowerToys';                 Name = 'Microsoft PowerToys' }
+      @{ Scope = 'machine'; Id = 'Microsoft.Sysinternals.Autoruns';     Name = 'Microsoft Sysinternals Autoruns' }
+      @{ Scope = 'machine'; Id = 'Microsoft.Sysinternals.ProcessExplorer'; Name = 'Microsoft Sysinternals ProcessExplorer' }
+      @{ Scope = 'machine'; Id = 'Microsoft.Sysinternals.ProcessMonitor'; Name = 'Microsoft Sysinternals ProcessMonitor' }
       @{ Scope = 'user';    Id = 'Microsoft.VisualStudioCode';          Name = 'Visual Studio Code'; SelfUpdating = $true }
       #@{ Scope = 'machine'; Id = 'Microsoft.WindowsTerminal';           Name = 'Windows Terminal' } Don't update Terminal from within a script running in the terminal!
       @{ Scope = 'machine'; Id = 'Mozilla.Firefox';                     Name = 'Mozilla Firefox' }
@@ -248,6 +251,7 @@
     )}
   )
 }
+
 
 
 
