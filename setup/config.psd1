@@ -229,7 +229,7 @@
     )}
 
     # Home-only apps (matches home computer name patterns)
-    @{ For = @('RICHARD-P340'); Apps = @(
+    @{ For = @('RICHARD-*'); Apps = @(
       @{ Scope = 'user';    Id = 'Anaconda.Miniconda3';                 Name = 'Miniconda3' }
       @{ Scope = 'machine'; Id = 'angryziber.AngryIPScanner';           Name = 'Angry IP Scanner' }
       @{ Scope = 'user';    Id = 'Balena.Etcher';                       Name = 'balenaEtcher' }
@@ -251,6 +251,7 @@
     )}
   )
 }
+
 
 
 
