@@ -119,6 +119,8 @@ Configure the app-installer, WinGetUI:
     * Preferences > Advanced: Launch app on login
 * Powertoys
     * ZoomIt enable
+* Windows default display:
+    * Display Settings > Multiple displays: Make this my main display
  
 ### Ubuntu
 
