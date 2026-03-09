@@ -86,7 +86,7 @@
       @{ Type = "GitConfig"; Key = "credential.helper"; Value = "manager"; Flags = "--replace-all" }
       @{ Type = "GitConfig"; Key = "init.defaultBranch"; Value = "main" }
       @{ Type = "GitConfig"; Key = "pull.rebase";       Value = "false" }
-      @{ Type = "GitConfig"; Key = "core.autocrlf";     Value = "false" }
+      @{ Type = "GitConfig"; Key = "core.autocrlf";     Value = "true" }
       @{ Type = "GitConfig"; Key = "push.autoSetupRemote"; Value = "true" }
 
  # 23        1.224 it config --global --add safe.directory "C:/code/*"
@@ -101,7 +101,9 @@
   # ----------------------------------------------------------------------------
   # Configuration Files
   # ----------------------------------------------------------------------------
-  # Each entry specifies a file (relative to %USERPROFILE%), a key prefix, and desired value
+  # Each entry specifies a file path relative to %USERPROFILE%, a key prefix, and desired value
+  # Special handling: Paths starting with "Documents\" automatically resolve to the Windows
+  # Documents folder location (respects OneDrive folder redirection if enabled)
   # The script ensures each file has a line: key + value
   ConfigFiles = @(
     # Example entries (uncomment and customize):

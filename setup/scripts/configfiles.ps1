@@ -35,6 +35,22 @@ param(
 $paths = Get-SetupPaths
 $config = Get-SetupConfig -RootDir $paths.RootDir
 
+# Resolve file paths, respecting Windows folder redirection for Documents
+function Resolve-ConfigFilePath {
+  param([string]$RelativePath)
+  
+  # Special handling for Documents folder which may be redirected to OneDrive
+  if ($RelativePath -match '^Documents\\') {
+    $documentsPath = [Environment]::GetFolderPath('MyDocuments')
+    $remainingPath = $RelativePath -replace '^Documents\\', ''
+    return Join-Path $documentsPath $remainingPath
+  }
+  
+  # All other paths are relative to USERPROFILE
+  return Join-Path $env:USERPROFILE $RelativePath
+}
+
+
 # -----------------------------
 # Output helper
 # -----------------------------
@@ -69,7 +85,7 @@ Write-Host "Base path: $env:USERPROFILE" -ForegroundColor Cyan
 $hasUpdates = $false
 
 foreach ($entry in $config.ConfigFiles) {
-  $filePath = Join-Path $env:USERPROFILE $entry.File
+  $filePath = Resolve-ConfigFilePath $entry.File
   $key = $entry.Key
   $value = $entry.Value
   $desiredLine = $key + $value
