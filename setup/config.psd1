@@ -235,12 +235,12 @@
       @{ Scope = 'user';    Id = 'Anaconda.Miniconda3';                 Name = 'Miniconda3' }
       @{ Scope = 'machine'; Id = 'angryziber.AngryIPScanner';           Name = 'Angry IP Scanner' }
       @{ Scope = 'user';    Id = 'Balena.Etcher';                       Name = 'balenaEtcher' }
-      @{ Scope = 'machine'; Id = 'CleverFiles.DiskDrill';               Name = 'Disk Drill' }
+      #@{ Scope = 'none';    Id = 'CleverFiles.DiskDrill';               Name = 'Disk Drill' } Installer hash does not match
       #@{ Scope = 'machine'; Id = 'GeoGebra.Classic.5';                  Name = 'GeoGebra Classic 5' } Installer hash does not match
       @{ Scope = 'machine'; Id = 'Google.GoogleDrive';                  Name = 'Google Drive' }
       @{ Scope = 'none';    Id = 'Gyan.FFmpeg';                         Name = 'FFmpeg' }
       @{ Scope = 'machine'; Id = 'Microsoft.VisualStudio.Community';    Name = 'Visual Studio Community' }
-      @{ Scope = 'machine'; Id = 'Pingman.PingPlotter';                 Name = 'PingPlotter' }
+      @{ Scope = 'none';    Id = 'Pingman.PingPlotter';                 Name = 'PingPlotter' }
       @{ Scope = 'machine'; Id = 'Racket.Racket';                       Name = 'Racket' }
       @{ Scope = 'machine'; Id = 'Valve.Steam';                         Name = 'Steam' }
       @{ Scope = 'machine'; Id = 'VideoLAN.VLC';                        Name = 'VLC Media Player' }
