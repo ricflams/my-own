@@ -182,7 +182,7 @@
       }
     )
 
-## winget install -e --id Amazon.Kiro --scope machine
+## winget install -e --id Amazon.Kiro --scope user
 
   # ----------------------------------------------------------------------------
   # Winget App Installations
@@ -255,6 +255,7 @@
     )}
   )
 }
+
 
 
 
