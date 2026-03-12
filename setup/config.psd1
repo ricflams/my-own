@@ -183,8 +183,10 @@
     )
 
 ## winget install -e --id Amazon.Kiro --scope user
-## npm i -g @openai/codex
+## npm install -g @openai/codex
 ## npm install -g @google/gemini-cli
+## npm install -g @sourcegraph/amp@latest
+## npm install -g opencode-ai
 
   # ----------------------------------------------------------------------------
   # Winget App Installations
@@ -257,6 +259,7 @@
     )}
   )
 }
+
 
 
 
