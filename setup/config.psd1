@@ -187,6 +187,7 @@
 ## npm install -g @google/gemini-cli
 ## npm install -g @sourcegraph/amp@latest
 ## npm install -g opencode-ai
+## npm install -g @marp-team/marp-cli
 
   # ----------------------------------------------------------------------------
   # Winget App Installations
