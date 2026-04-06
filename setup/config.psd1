@@ -188,6 +188,7 @@
 ## npm install -g @sourcegraph/amp@latest
 ## npm install -g opencode-ai
 ## npm install -g @marp-team/marp-cli
+## winget install -e --id IrfanSkiljan.IrfanView
 
   # ----------------------------------------------------------------------------
   # Winget App Installations
