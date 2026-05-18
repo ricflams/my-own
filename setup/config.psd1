@@ -182,13 +182,11 @@
       }
     )
 
-## winget install -e --id Amazon.Kiro --scope user
 ## npm install -g @openai/codex
 ## npm install -g @google/gemini-cli
 ## npm install -g @sourcegraph/amp@latest
 ## npm install -g opencode-ai
 ## npm install -g @marp-team/marp-cli
-## winget install -e --id IrfanSkiljan.IrfanView
 
   # ----------------------------------------------------------------------------
   # Winget App Installations
@@ -203,10 +201,12 @@
     @{ For = @('*'); Apps = @(
       @{ Scope = 'machine'; Id = '7zip.7zip';                           Name = '7-Zip' }
       @{ Scope = 'machine'; Id = 'Amazon.AWSCLI';                       Name = 'AWS CLI' }
+      @{ Scope = 'user';    Id = 'Amazon.Kiro';                         Name = 'Kiro' }
       @{ Scope = 'user';    Id = 'Anthropic.ClaudeCode';                Name = 'Claude Code' }
       #@{ Scope = 'machine'; Id = 'Apple.Music';                        Name = 'Apple Music'; Source = 'msstore' } # Store ID: 9PFHDD62MXS1
       @{ Scope = 'machine'; Id = 'AutoHotkey.AutoHotkey';               Name = 'AutoHotkey' }
       #@{ Scope = 'machine'; Id = 'Canonical.Ubuntu.2404';               Name = 'Ubuntu 24.04 LTS' }
+      @{ Scope = 'machine'; Id = 'OpenAI.Codex';                        Name = 'Codex' }
       #@{ Scope = 'user';    Id = 'dahlbyk.posh-git';                    Name = 'Posh-Git' }
       @{ Scope = 'machine'; Id = 'Ghisler.TotalCommander';              Name = 'Total Commander' }
       @{ Scope = 'machine'; Id = 'Git.Git';                             Name = 'Git' }
@@ -215,6 +215,7 @@
       @{ Scope = 'machine'; Id = 'GitExtensionsTeam.GitExtensions';     Name = 'Git Extensions' }
       @{ Scope = 'machine'; Id = 'Google.Chrome';                       Name = 'Google Chrome'; SelfUpdating = $true }
       @{ Scope = 'user';    Id = 'JanDeDobbeleer.OhMyPosh';             Name = 'Oh My Posh' }
+      @{ Scope = 'machine'; Id = 'IrfanSkiljan.IrfanView';              Name = 'IrfanView' }
       @{ Scope = 'user';    Id = 'JesseDuffield.lazygit';               Name = 'Lazygit' }
       #@{ Scope = 'machine'; Id = 'Koofr.Koofr';                         Name = 'Koofr' }
       @{ Scope = 'machine'; Id = 'MartiCliment.UniGetUI';               Name = 'UniGetUI' }
