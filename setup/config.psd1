@@ -207,6 +207,7 @@
       @{ Scope = 'machine'; Id = 'GitExtensionsTeam.GitExtensions';     Name = 'Git Extensions' }
       @{ Scope = 'machine'; Id = 'Google.Chrome';                       Name = 'Google Chrome'; SelfUpdating = $true }
       @{ Scope = 'user';    Id = 'JanDeDobbeleer.OhMyPosh';             Name = 'Oh My Posh' }
+      @{ Scope = 'user';    Id = 'JesseDuffield.lazygit';               Name = 'Lazygit' }
       #@{ Scope = 'machine'; Id = 'Koofr.Koofr';                         Name = 'Koofr' }
       @{ Scope = 'machine'; Id = 'MartiCliment.UniGetUI';               Name = 'UniGetUI' }
       @{ Scope = 'machine'; Id = 'Microsoft.PowerShell';                Name = 'PowerShell' }
