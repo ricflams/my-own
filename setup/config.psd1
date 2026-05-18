@@ -107,7 +107,7 @@
   # The script ensures each file has a line: key + value
   ConfigFiles = @(
     # Example entries (uncomment and customize):
-    @{ File = "Documents\ShareX\ApplicationConfig.json"; Key = "    ""AfterCaptureJob"": "; Value = """CopyImageToClipboard, SaveImageToFile, AnnotateImage""," }
+    @{ File = "Documents\ShareX\ApplicationConfig.json"; Key = "  ""AfterCaptureJob"": "; Value = """CopyImageToClipboard, SaveImageToFile, AnnotateImage""," }
     @{ File = "Documents\ShareX\ApplicationConfig.json"; Key = "  ""UseCustomScreenshotsPath"": "; Value = "true," }
     @{ File = "Documents\ShareX\ApplicationConfig.json"; Key = "  ""CustomScreenshotsPath"": "; Value = """C:\\my\\koffr\\work\\screenshots""," }
     @{ File = "Documents\ShareX\ApplicationConfig.json"; Key = "  ""SaveImageSubFolderPattern"": "; Value = """%cn""," }
@@ -137,12 +137,12 @@
   # All other profiles remain in settings.json but are hidden
   WindowsTerminalProfiles = @(
     @{ 
-      Match = @{ Name = "PowerShell"; PreferredSource = "Windows.Terminal.PowershellCore" }
-      StartingDirectory = "C:\my"
-    }
-    @{ 
       Match = @{ Name = @("Ubuntu-24.04", "Ubuntu 24.04", "Ubuntu"); PreferredSource = "CanonicalGroupLimited.Ubuntu" }
       StartingDirectory = "~"
+    }
+    @{ 
+      Match = @{ Name = "PowerShell"; PreferredSource = "Windows.Terminal.PowershellCore" }
+      StartingDirectory = "C:\my"
     }
     @{ 
       Match = @{ Name = "Command Prompt" }
