@@ -233,6 +233,7 @@ function Get-WingetErrorMessage {
     "-1978335215" = "Package Already Installed"
     "-1978335216" = "Blocked By Policy"
     "-1978335228" = "Download Failed"
+    "-1978335226" = "Shell Execute Install Failed"
     "-1978335229" = "Install Failed"
     "-1978335230" = "Invalid Command Line"
     "-1978335231" = "Internal Error"
@@ -537,6 +538,9 @@ foreach ($app in $appsToProcess) {
         if ($LASTEXITCODE -ne 0) {
           $errorMsg = Get-WingetErrorMessage -ExitCode $LASTEXITCODE
           Write-Host "    Warning: Upgrade failed: $errorMsg (exit code: $LASTEXITCODE)" -ForegroundColor Yellow
+          if ($LASTEXITCODE -eq -1978335226) {
+            Write-Host "    Consider uninstall first: winget uninstall --id $id --exact" -ForegroundColor DarkYellow
+          }
           if ($DebugMode) {
             Write-Host "    Output: $upgradeOutput" -ForegroundColor DarkGray
           }

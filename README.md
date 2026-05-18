@@ -91,6 +91,7 @@ Configure the app-installer, WinGetUI:
 ## Manual setup steps
 
 * **Install** Koofr, https://app.koofr.net/dl/apps/win
+* Gemini CLI, npm install -g @google/gemini-cli
 
 * Filco TKL keyboard. For connection, press "clear device button", Ctrl-Alt-Fn, 1-4
 * MX Anywhere Mouse: toggle clicky/smooth scroll with lower-left-side button
