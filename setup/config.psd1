@@ -186,6 +186,7 @@
 ## npm install -g @sourcegraph/amp@latest
 ## npm install -g opencode-ai
 ## npm install -g @marp-team/marp-cli
+## irm https://antigravity.google/cli/install.ps1 | iex
 
   # ----------------------------------------------------------------------------
   # Winget App Installations
