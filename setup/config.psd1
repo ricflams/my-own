@@ -183,7 +183,6 @@
     )
 
 ## npm install -g @openai/codex
-## npm install -g @google/gemini-cli
 ## npm install -g @sourcegraph/amp@latest
 ## npm install -g opencode-ai
 ## npm install -g @marp-team/marp-cli
@@ -213,6 +212,7 @@
       @{ Scope = 'machine'; Id = 'GitHub.cli';                          Name = 'GitHub CLI' }
       @{ Scope = 'user';    Id = 'GitHub.Copilot';                      Name = 'GitHub Copilot CLI' }
       @{ Scope = 'machine'; Id = 'GitExtensionsTeam.GitExtensions';     Name = 'Git Extensions' }
+      @{ Scope = 'user';    Id = 'Google.Antigravity';                  Name = 'antigravity' }
       @{ Scope = 'machine'; Id = 'Google.Chrome';                       Name = 'Google Chrome'; SelfUpdating = $true }
       @{ Scope = 'user';    Id = 'JanDeDobbeleer.OhMyPosh';             Name = 'Oh My Posh' }
       @{ Scope = 'machine'; Id = 'IrfanSkiljan.IrfanView';              Name = 'IrfanView' }
