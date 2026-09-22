@@ -187,6 +187,7 @@
 ## npm install -g opencode-ai
 ## npm install -g @marp-team/marp-cli
 ## irm https://antigravity.google/cli/install.ps1 | iex
+# winget install -e --id SQLite.SQLite
 
   # ----------------------------------------------------------------------------
   # Winget App Installations
